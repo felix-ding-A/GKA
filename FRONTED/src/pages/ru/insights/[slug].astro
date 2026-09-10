@@ -113,6 +113,15 @@ const faqSchema = displayFaqItems && displayFaqItems.length > 0 ? {
 >
   <script type="application/ld+json" set:html={JSON.stringify(blogSchema)} slot="head" />
   {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} slot="head" />}
+  <link
+    rel="preload"
+    as="image"
+    href={urlFor(post.coverImage).width(1200).format('webp').url()}
+    imagesrcset={`${urlFor(post.coverImage).width(600).format('webp').url()} 600w, ${urlFor(post.coverImage).width(900).format('webp').url()} 900w, ${urlFor(post.coverImage).width(1200).format('webp').url()} 1200w`}
+    imagesizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 1200px"
+    type="image/webp"
+    slot="head"
+  />
 
   <main class="insight-detail bg-noise">
     <div class="container article-layout-wrapper">
@@ -209,7 +218,15 @@ const faqSchema = displayFaqItems && displayFaqItems.length > 0 ? {
         <!-- Cover Image -->
         <div class="article-cover glass">
           <picture style="display: contents;">
-            <source srcset={urlFor(post.coverImage).width(1200).format('webp').url()} type="image/webp" />
+            <source
+              srcset={`
+                ${urlFor(post.coverImage).width(600).format('webp').url()} 600w,
+                ${urlFor(post.coverImage).width(900).format('webp').url()} 900w,
+                ${urlFor(post.coverImage).width(1200).format('webp').url()} 1200w
+              `}
+              sizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, 1200px"
+              type="image/webp"
+            />
             <img
               src={urlFor(post.coverImage).width(1200).url()}
               alt={localTitle}
