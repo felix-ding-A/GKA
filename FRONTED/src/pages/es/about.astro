@@ -13,7 +13,7 @@ const aboutSchema = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
   "name": "Sobre GINKVORA",
-  "description": "Conozca la historia de GINKVORA, las tecnologías de extracción de alta pureza y los estándares de calidad de las materias primas.",
+  "description": "GINKVORA suministra ingredientes botánicos y bioactivos y ofrece personalización OEM. Conozca nuestros datos empresariales y proceso de suministro.",
   "url": "https://ginkvora.com/es/about",
   "mainEntity": authors.map(author => ({
     "@type": "Person",
@@ -27,8 +27,8 @@ const aboutSchema = {
 
 <BaseLayout
   lang={lang}
-  title="Fabricante de Ingredientes Bioactivos | Sobre GINKVORA"
-  description="Descubra la transición de GINKVORA de raíces botánicas a soluciones avanzadas de ingredientes bioactivos para formuladores de cosméticos y nutracéuticos."
+  title="Proveedor de ingredientes bioactivos | Sobre GINKVORA"
+  description="GINKVORA suministra ingredientes botánicos y bioactivos y ofrece personalización OEM. Conozca nuestros datos empresariales y proceso de suministro."
 >
   <script type="application/ld+json" set:html={JSON.stringify(aboutSchema)} slot="head" />
   <main class="about-page bg-noise">
@@ -38,9 +38,7 @@ const aboutSchema = {
       <div class="container banner-content">
         <span class="section-label fade-in-up">{t('about.label')}</span>
         <h1 class="banner-title fade-in-up delay-1">Experiencia Botánica. Suministro de Ingredientes Bioactivos.</h1>
-        <p class="banner-desc fade-in-up delay-2">
-          Conectando fuentes botánicas prístinas con un avanzado aislamiento de laboratorio para suministrar ingredientes activos de alta pureza a las industrias globales.
-        </p>
+        <p class="banner-desc fade-in-up delay-2">Extractos botánicos, activos cosméticos, péptidos e ingredientes funcionales, con personalización OEM para el cuidado de la piel, la nutrición y el bienestar.</p>
       </div>
     </header>
 
@@ -48,13 +46,10 @@ const aboutSchema = {
     <section class="container section intro-section" aria-label="Descripción de la empresa">
       <div class="intro-grid">
         <div class="intro-left reveal">
-          <h2>Naturaleza Pura, Ciencia Probada</h2>
-          <p>
-            Fundada con un compromiso con la pureza química y la integridad botánica, GINKVORA se ha convertido en un fabricante B2B y formulador personalizado líder de extractos botánicos naturales y compuestos aislados de alto valor.
-          </p>
-          <p>
-            Gestionamos una cadena de suministro integral que abarca regiones de cultivo botánico certificadas, instalaciones de extracción con solventes y CO2 supercrítico de última generación, y un laboratorio de validación de I+D avanzado en Xi'an.
-          </p>
+          <h2>Sobre GINKVORA</h2>
+          <p>GINKVORA suministra extractos botánicos, activos cosméticos, péptidos e ingredientes funcionales para aplicaciones de cuidado de la piel, nutrición y bienestar, junto con servicios de personalización OEM.</p>
+          <p>Atendemos a distribuidores, revendedores, formuladores y fabricantes de todo el mundo. También suministramos materias primas cosméticas a salones de belleza y ofrecemos productos personalizados mediante OEM a organizaciones de gestión de la salud.</p>
+          <p>Con sede en Xi&#x27;an, China, coordinamos el abastecimiento de ingredientes, la definición de especificaciones, la documentación y las entregas internacionales. Nuestro objetivo es sencillo: ayudar a los clientes a obtener ingredientes adecuados y desarrollar productos personalizados con requisitos claros, apoyo práctico y un punto de contacto directo.</p>
           <div class="mission-box">
             <span class="mission-title">Nuestra Misión Principal</span>
             <blockquote class="mission-text">
@@ -80,42 +75,82 @@ const aboutSchema = {
       </div>
     </section>
 
-    <!-- Core Extraction Values -->
-    <section class="section values-section bg-deep" aria-label="Ventajas tecnológicas">
+    <!-- Company Information -->
+    <section class="container section company-section" aria-labelledby="company-information">
+      <div class="company-grid">
+        <div class="reveal">
+          <span class="section-label">Datos de la empresa</span>
+          <h2 id="company-information">Información de la empresa</h2>
+        </div>
+        <dl class="company-card glass reveal">
+          <div><dt>Razón social</dt><dd>Shaanxi Ginkvora Biotechnology Co., Ltd.</dd></div>
+          <div><dt>Número D-U-N-S®</dt><dd>975262249</dd></div>
+          <div><dt>Domicilio social</dt><dd><address>Room 502, Unit 1, Building 16,<br />CR Land Future City Chenxi, Gangfeng Road,<br />International Trade &amp; Logistics Park,<br />Xi'an, Shaanxi, China</address></dd></div>
+          <div><dt>Correo electrónico comercial</dt><dd><a href="mailto:inquiry@ginkvora.com">inquiry@ginkvora.com</a></dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Managed Sourcing Stages -->
+    <section class="section values-section bg-deep" aria-labelledby="how-we-work">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Competencia Científica</span>
-          <h2 class="section-title">Nuestro Proceso de Extracción Industrial</h2>
-          <p class="section-desc">
-            Combinando la sabiduría herbal tradicional con tecnologías de aislamiento analítico de vanguardia.
-          </p>
+          <span class="section-label">Cómo trabajamos</span>
+          <h2 class="section-title" id="how-we-work">Un punto de contacto. Cuatro etapas coordinadas.</h2>
+          <p class="section-desc">Al comprar a GINKVORA, dispone de un único punto de contacto que coordina el abastecimiento, la documentación, la verificación de lotes y la entrega.</p>
         </div>
-
-        <div class="grid-3">
+        <div class="stages-grid">
           <article class="value-card glass reveal">
-            <div class="value-icon">🔬</div>
-            <h3>Aislamiento Impulsado por la Pureza</h3>
-            <p>
-              Nos enfocamos en aislar constituyentes monómeros activos (como NMN, PQQ y Glabridina) a purezas estandarizadas de ≥98% y ≥99% utilizando sistemas avanzados de cromatografía.
-            </p>
+            <div class="value-icon" aria-hidden="true">01</div>
+            <h3>Evaluación de proveedores y especificaciones</h3><p>Evaluamos a los productores y confirmamos el grado del ingrediente, las especificaciones y los requisitos del pedido antes de la compra.</p>
           </article>
-
-          <article class="value-card glass reveal reveal-delay-1">
-            <div class="value-icon">⚙️</div>
-            <h3>Métodos de Extracción Ecológicos</h3>
-            <p>
-              Utilizando la extracción con dióxido de carbono supercrítico (sCO2) y procesos de solventes a base de agua a baja temperatura para eliminar los solventes químicos residuales tóxicos y proteger los compuestos activos.
-            </p>
+          <article class="value-card glass reveal">
+            <div class="value-icon" aria-hidden="true">02</div>
+            <h3>Documentación del lote</h3><p>Coordinamos el COA específico de cada lote y la documentación complementaria pertinente, incluidas MSDS, TDS e informes de ensayo disponibles, según el producto y sus requisitos documentales.</p>
           </article>
-
-          <article class="value-card glass reveal reveal-delay-2">
-            <div class="value-icon">🛡️</div>
-            <h3>Registros de Calidad Trazables</h3>
-            <p>
-              Cada lote fabricado se somete a rigurosas pruebas de identidad, pureza, metales pesados, microbios y residuos de pesticidas. Los informes de validación de laboratorios externos (SGS/Eurofins) están disponibles bajo solicitud.
-            </p>
+          <article class="value-card glass reveal">
+            <div class="value-icon" aria-hidden="true">03</div>
+            <h3>Verificación de calidad</h3><p>Revisamos los resultados del lote frente a las especificaciones acordadas antes del despacho. Según el ingrediente, pueden incluir pureza y contenido por HPLC, metales pesados, disolventes residuales y límites microbiológicos. Los requisitos de ensayos adicionales se acuerdan antes de confirmar el pedido.</p>
+          </article>
+          <article class="value-card glass reveal">
+            <div class="value-icon" aria-hidden="true">04</div>
+            <h3>Embalaje y entrega</h3><p>Organizamos envíos por mensajería exprés, transporte aéreo o marítimo conforme a los Incoterms acordados y confirmamos con usted los requisitos de embalaje y los plazos de despacho. Se puede coordinar el envasado con barrido de nitrógeno para los activos sensibles que lo requieran y sean compatibles con este método.</p>
           </article>
         </div>
+        <p class="process-note">Durante todo el proceso, dispone de un contacto directo para las especificaciones, la documentación y las actualizaciones de entrega.</p>
+      </div>
+    </section>
+
+    <!-- Authors Section -->
+    <section class="container section authors-section" aria-label="Nuestros asesores y colaboradores técnicos">
+      <div class="section-header">
+        <span class="section-label">Experiencia y colaboración</span>
+        <h2>Nuestros asesores y colaboradores técnicos</h2>
+        <p class="section-desc">Conozca a los profesionales independientes que colaboran con GINKVORA en proyectos científicos, de formulación, regulatorios y comerciales.</p>
+      </div>
+
+      <div class="authors-grid">
+        {authors.map((author) => (
+          <div class="author-card glass reveal">
+            <div class="author-avatar-wrapper">
+              <img
+                src={urlFor(author.avatar).width(160).height(160).fit('crop').url()}
+                alt={author.name}
+                class="author-avatar"
+                width="160"
+                height="160"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="author-info">
+              <h3>{getLocalizedField(author, 'name', lang) || author.name}</h3>
+              {(getLocalizedField(author, 'title', lang) || author.title) && <p class="author-title">{getLocalizedField(author, 'title', lang) || author.title}</p>}
+              {(getLocalizedField(author, 'credentials', lang) || author.credentials) && <span class="author-creds">{getLocalizedField(author, 'credentials', lang) || author.credentials}</span>}
+              {(getLocalizedField(author, 'bio', lang) || author.bio) && <p class="author-bio">{getLocalizedField(author, 'bio', lang) || author.bio}</p>}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
 
@@ -154,45 +189,10 @@ const aboutSchema = {
         <div class="timeline-item reveal reveal-delay-3">
           <div class="timeline-badge">2026</div>
           <div class="timeline-content glass">
-            <h3>Logística Global y Centro Digital</h3>
+            <h3>Logística global y lanzamiento de la plataforma digital</h3>
             <p>Lanzamiento de una red de suministro internacional de alto rendimiento que atiende a marcas de suplementos, cuidado de la piel y nutrición deportiva en más de 50 países a través de centros logísticos optimizados.</p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Authors Section -->
-    <section class="container section authors-section" aria-label="Expertos">
-      <div class="section-header">
-        <span class="section-label">Capacidad Científica</span>
-        <h2>Nuestro Equipo Científico y Regulatorio</h2>
-        <p class="section-desc">
-          Conozca a los investigadores, desarrolladores y expertos en control de calidad detrás de los bioactivos vegetales puros de GINKVORA.
-        </p>
-      </div>
-
-      <div class="authors-grid">
-        {authors.map((author) => (
-          <div class="author-card glass reveal">
-            <div class="author-avatar-wrapper">
-              <img
-                src={urlFor(author.avatar).width(160).height(160).fit('crop').url()}
-                alt={author.name}
-                class="author-avatar"
-                width="160"
-                height="160"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div class="author-info">
-              <h3>{getLocalizedField(author, 'name', lang) || author.name}</h3>
-              {(getLocalizedField(author, 'title', lang) || author.title) && <p class="author-title">{getLocalizedField(author, 'title', lang) || author.title}</p>}
-              {(getLocalizedField(author, 'credentials', lang) || author.credentials) && <span class="author-creds">{getLocalizedField(author, 'credentials', lang) || author.credentials}</span>}
-              {(getLocalizedField(author, 'bio', lang) || author.bio) && <p class="author-bio">{getLocalizedField(author, 'bio', lang) || author.bio}</p>}
-            </div>
-          </div>
-        ))}
       </div>
     </section>
 
@@ -211,6 +211,26 @@ const aboutSchema = {
 </BaseLayout>
 
 <style>
+  .company-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: start; }
+  .company-grid h2 { font-size: clamp(1.75rem, 3vw, 2.25rem); margin-top: 0.5rem; }
+  .company-card { margin: 0; padding: 2rem; border-radius: var(--radius-lg); min-width: 0; }
+  .company-card > div { padding: 1.25rem 0; border-bottom: 1px solid var(--color-border); }
+  .company-card > div:first-child { padding-top: 0; }
+  .company-card > div:last-child { padding-bottom: 0; border-bottom: 0; }
+  .company-card dt { color: var(--color-primary-light); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .company-card dd { margin: 0; color: var(--color-text); line-height: 1.75; overflow-wrap: anywhere; }
+  .company-card address { font-style: normal; }
+  .company-card a:hover { text-decoration: underline; }
+  .stages-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+  .stages-grid .value-card { text-align: start; }
+  .stages-grid .value-icon { color: var(--color-primary-light); font-family: var(--font-mono); font-size: 1.5rem; }
+  .process-note { text-align: center; max-width: 760px; margin: 2rem auto 0; color: var(--color-text-secondary); }
+  @media (max-width: 768px) {
+    .company-grid, .stages-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .company-card { padding: 1.5rem; }
+  }
+
+
   .about-page { padding-block: 0 var(--space-4xl); }
   .page-banner { position: relative; padding-block: 8rem 5rem; background: linear-gradient(135deg, #030201 0%, #0e1007 60%, #0a0703 100%); overflow: hidden; margin-bottom: var(--space-2xl); }
   .banner-gradient { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(212,166,84,0.07) 0%, transparent 70%); }

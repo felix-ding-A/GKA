@@ -13,7 +13,7 @@ const aboutSchema = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
   "name": "О компании GINKVORA",
-  "description": "Узнайте об истории GINKVORA, технологиях высокочистой экстракции и стандартах качества сырья.",
+  "description": "GINKVORA поставляет растительные и биоактивные ингредиенты и предлагает OEM-продукцию на заказ. Данные компании и этапы поставки.",
   "url": "https://ginkvora.com/ru/about",
   "mainEntity": authors.map(author => ({
     "@type": "Person",
@@ -27,8 +27,8 @@ const aboutSchema = {
 
 <BaseLayout
   lang={lang}
-  title="Производитель биоактивных ингредиентов | О компании GINKVORA"
-  description="Узнайте о переходе GINKVORA от ботанических корней к передовым решениям биоактивных ингредиентов для разработчиков косметики и нутрицевтиков."
+  title="Поставщик биоактивных ингредиентов | О GINKVORA"
+  description="GINKVORA поставляет растительные и биоактивные ингредиенты и предлагает OEM-продукцию на заказ. Данные компании и этапы поставки."
 >
   <script type="application/ld+json" set:html={JSON.stringify(aboutSchema)} slot="head" />
   <main class="about-page bg-noise">
@@ -38,9 +38,7 @@ const aboutSchema = {
       <div class="container banner-content">
         <span class="section-label fade-in-up">{t('about.label')}</span>
         <h1 class="banner-title fade-in-up delay-1">Ботаническая экспертиза. Поставка биоактивных ингредиентов.</h1>
-        <p class="banner-desc fade-in-up delay-2">
-          Соединяем источники чистого растительного сырья с передовыми методами лабораторной экстракции для поставки высокочистых активных ингредиентов мировым производителям.
-        </p>
+        <p class="banner-desc fade-in-up delay-2">Растительные экстракты, косметические активы, пептиды и функциональные ингредиенты, а также OEM-продукция на заказ для ухода за кожей, питания и поддержания благополучия.</p>
       </div>
     </header>
 
@@ -48,13 +46,10 @@ const aboutSchema = {
     <section class="container section intro-section" aria-label="О компании">
       <div class="intro-grid">
         <div class="intro-left reveal">
-          <h2>Чистая природа, доказанная наука</h2>
-          <p>
-            Основанная с приверженностью химической чистоте и ботанической целостности, GINKVORA превратилась в ведущего B2B производителя и разработчика рецептур высокоценных натуральных растительных экстрактов и изолированных соединений.
-          </p>
-          <p>
-            Мы управляем комплексной цепочкой поставок, охватывающей сертифицированные регионы заготовки ботанического сырья, современные установки экстракции сверхкритическим CO2 и растворителями, а также передовую R&D лабораторию в Сиане.
-          </p>
+          <h2>О компании GINKVORA</h2>
+          <p>GINKVORA поставляет растительные экстракты, косметические активы, пептиды и функциональные ингредиенты для ухода за кожей, питания и поддержания благополучия, а также предлагает изготовление продукции на заказ по модели OEM.</p>
+          <p>Мы работаем с дистрибьюторами, реселлерами, разработчиками рецептур и производителями по всему миру. Мы также поставляем косметическое сырьё салонам красоты и продукцию, изготовленную на заказ по модели OEM, организациям в сфере управления здоровьем.</p>
+          <p>Компания находится в Сиане, Китай. Мы координируем закупку ингредиентов, согласование спецификаций, подготовку документации и международную доставку. Наша цель проста: помогать клиентам подбирать подходящие ингредиенты и разрабатывать продукцию на заказ с чёткими требованиями, практической поддержкой и прямым контактом.</p>
           <div class="mission-box">
             <span class="mission-title">Наша основная миссия</span>
             <blockquote class="mission-text">
@@ -80,42 +75,82 @@ const aboutSchema = {
       </div>
     </section>
 
-    <!-- Core Extraction Values -->
-    <section class="section values-section bg-deep" aria-label="Технологические преимущества">
+    <!-- Company Information -->
+    <section class="container section company-section" aria-labelledby="company-information">
+      <div class="company-grid">
+        <div class="reveal">
+          <span class="section-label">Данные компании</span>
+          <h2 id="company-information">Информация о компании</h2>
+        </div>
+        <dl class="company-card glass reveal">
+          <div><dt>Юридическое наименование</dt><dd>Shaanxi Ginkvora Biotechnology Co., Ltd.</dd></div>
+          <div><dt>Номер D-U-N-S®</dt><dd>975262249</dd></div>
+          <div><dt>Юридический адрес</dt><dd><address>Room 502, Unit 1, Building 16,<br />CR Land Future City Chenxi, Gangfeng Road,<br />International Trade &amp; Logistics Park,<br />Xi'an, Shaanxi, China</address></dd></div>
+          <div><dt>Электронная почта для деловых запросов</dt><dd><a href="mailto:inquiry@ginkvora.com">inquiry@ginkvora.com</a></dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Managed Sourcing Stages -->
+    <section class="section values-section bg-deep" aria-labelledby="how-we-work">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">Научный потенциал</span>
-          <h2 class="section-title">Промышленный процесс экстракции</h2>
-          <p class="section-desc">
-            Сочетание традиционной фитотерапии с передовыми аналитическими технологиями выделения.
-          </p>
+          <span class="section-label">Как мы работаем</span>
+          <h2 class="section-title" id="how-we-work">Единое контактное лицо. Четыре этапа координации.</h2>
+          <p class="section-desc">При закупке у GINKVORA вы взаимодействуете с одним контактным лицом, которое координирует снабжение, документацию, проверку партий и доставку.</p>
         </div>
-
-        <div class="grid-3">
+        <div class="stages-grid">
           <article class="value-card glass reveal">
-            <div class="value-icon">🔬</div>
-            <h3>Высокочистое выделение</h3>
-            <p>
-              Мы фокусируемся на выделении активных мономерных компонентов (таких как NMN, PQQ и глабридин) до стандартизированной чистоты ≥98% и ≥99% с использованием современных хроматографических систем.
-            </p>
+            <div class="value-icon" aria-hidden="true">01</div>
+            <h3>Оценка поставщиков и спецификации</h3><p>До закупки мы оцениваем производителей и согласовываем категорию ингредиента, спецификации и требования к заказу.</p>
           </article>
-
-          <article class="value-card glass reveal reveal-delay-1">
-            <div class="value-icon">⚙️</div>
-            <h3>Экологичные методы экстракции</h3>
-            <p>
-              Использование экстракции сверхкритическим диоксидом углерода (sCO2) и низкотемпературных водных процессов для исключения токсичных остаточных химических растворителей и защиты активных соединений.
-            </p>
+          <article class="value-card glass reveal">
+            <div class="value-icon" aria-hidden="true">02</div>
+            <h3>Документация на партию</h3><p>Мы координируем предоставление COA на конкретную партию и соответствующих сопроводительных документов, включая MSDS, TDS и доступные протоколы испытаний, с учётом продукта и ваших требований к документации.</p>
           </article>
-
-          <article class="value-card glass reveal reveal-delay-2">
-            <div class="value-icon">🛡️</div>
-            <h3>Прослеживаемые протоколы качества</h3>
-            <p>
-              Каждая произведённая партия проходит строгие испытания на подлинность, чистоту, тяжелые металлы, микробиологию и остатки пестицидов. Протоколы испытаний независимых лабораторий (SGS/Eurofins) предоставляются по запросу.
-            </p>
+          <article class="value-card glass reveal">
+            <div class="value-icon" aria-hidden="true">03</div>
+            <h3>Проверка качества</h3><p>До отгрузки мы сопоставляем результаты анализа партии с согласованными спецификациями. В зависимости от ингредиента они могут включать чистоту и количественное содержание по ВЭЖХ (HPLC), тяжёлые металлы, остаточные растворители и микробиологические показатели. Требования к дополнительным испытаниям согласовываются до подтверждения заказа.</p>
+          </article>
+          <article class="value-card glass reveal">
+            <div class="value-icon" aria-hidden="true">04</div>
+            <h3>Упаковка и доставка</h3><p>Мы организуем экспресс-доставку, авиационные или морские перевозки на согласованных условиях Incoterms и подтверждаем с вами требования к упаковке и сроки отгрузки. Для подходящих чувствительных активных ингредиентов возможна упаковка с продувкой азотом.</p>
           </article>
         </div>
+        <p class="process-note">На протяжении всего процесса у вас есть прямой контакт по вопросам спецификаций, документации и статуса доставки.</p>
+      </div>
+    </section>
+
+    <!-- Authors Section -->
+    <section class="container section authors-section" aria-label="Наши консультанты и технические партнёры">
+      <div class="section-header">
+        <span class="section-label">Экспертиза и сотрудничество</span>
+        <h2>Наши консультанты и технические партнёры</h2>
+        <p class="section-desc">Познакомьтесь с независимыми специалистами, которые сотрудничают с GINKVORA в научных, рецептурных, регуляторных и коммерческих проектах.</p>
+      </div>
+
+      <div class="authors-grid">
+        {authors.map((author) => (
+          <div class="author-card glass reveal">
+            <div class="author-avatar-wrapper">
+              <img
+                src={urlFor(author.avatar).width(160).height(160).fit('crop').url()}
+                alt={author.name}
+                class="author-avatar"
+                width="160"
+                height="160"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="author-info">
+              <h3>{getLocalizedField(author, 'name', lang) || author.name}</h3>
+              {(getLocalizedField(author, 'title', lang) || author.title) && <p class="author-title">{getLocalizedField(author, 'title', lang) || author.title}</p>}
+              {(getLocalizedField(author, 'credentials', lang) || author.credentials) && <span class="author-creds">{getLocalizedField(author, 'credentials', lang) || author.credentials}</span>}
+              {(getLocalizedField(author, 'bio', lang) || author.bio) && <p class="author-bio">{getLocalizedField(author, 'bio', lang) || author.bio}</p>}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
 
@@ -154,45 +189,10 @@ const aboutSchema = {
         <div class="timeline-item reveal reveal-delay-3">
           <div class="timeline-badge">2026</div>
           <div class="timeline-content glass">
-            <h3>Глобальная логистика и цифровой хаб</h3>
+            <h3>Глобальная логистика и запуск цифровой платформы</h3>
             <p>Запуск высокопроизводительной международной сети поставок, обслуживающей бренды добавок, косметики и спортивного питания в 50+ странах через оптимизированные логистические узлы.</p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Authors Section -->
-    <section class="container section authors-section" aria-label="Эксперты">
-      <div class="section-header">
-        <span class="section-label">Научный потенциал</span>
-        <h2>Наша научно-исследовательская команда</h2>
-        <p class="section-desc">
-          Познакомьтесь с исследователями, разработчиками и экспертами по качеству, создающими чистые растительные биоактивные вещества GINKVORA.
-        </p>
-      </div>
-
-      <div class="authors-grid">
-        {authors.map((author) => (
-          <div class="author-card glass reveal">
-            <div class="author-avatar-wrapper">
-              <img
-                src={urlFor(author.avatar).width(160).height(160).fit('crop').url()}
-                alt={author.name}
-                class="author-avatar"
-                width="160"
-                height="160"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div class="author-info">
-              <h3>{getLocalizedField(author, 'name', lang) || author.name}</h3>
-              {(getLocalizedField(author, 'title', lang) || author.title) && <p class="author-title">{getLocalizedField(author, 'title', lang) || author.title}</p>}
-              {(getLocalizedField(author, 'credentials', lang) || author.credentials) && <span class="author-creds">{getLocalizedField(author, 'credentials', lang) || author.credentials}</span>}
-              {(getLocalizedField(author, 'bio', lang) || author.bio) && <p class="author-bio">{getLocalizedField(author, 'bio', lang) || author.bio}</p>}
-            </div>
-          </div>
-        ))}
       </div>
     </section>
 
@@ -211,6 +211,26 @@ const aboutSchema = {
 </BaseLayout>
 
 <style>
+  .company-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: start; }
+  .company-grid h2 { font-size: clamp(1.75rem, 3vw, 2.25rem); margin-top: 0.5rem; }
+  .company-card { margin: 0; padding: 2rem; border-radius: var(--radius-lg); min-width: 0; }
+  .company-card > div { padding: 1.25rem 0; border-bottom: 1px solid var(--color-border); }
+  .company-card > div:first-child { padding-top: 0; }
+  .company-card > div:last-child { padding-bottom: 0; border-bottom: 0; }
+  .company-card dt { color: var(--color-primary-light); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .company-card dd { margin: 0; color: var(--color-text); line-height: 1.75; overflow-wrap: anywhere; }
+  .company-card address { font-style: normal; }
+  .company-card a:hover { text-decoration: underline; }
+  .stages-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+  .stages-grid .value-card { text-align: start; }
+  .stages-grid .value-icon { color: var(--color-primary-light); font-family: var(--font-mono); font-size: 1.5rem; }
+  .process-note { text-align: center; max-width: 760px; margin: 2rem auto 0; color: var(--color-text-secondary); }
+  @media (max-width: 768px) {
+    .company-grid, .stages-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .company-card { padding: 1.5rem; }
+  }
+
+
   .about-page { padding-block: 0 var(--space-4xl); }
   .page-banner { position: relative; padding-block: 8rem 5rem; background: linear-gradient(135deg, #030201 0%, #0e1007 60%, #0a0703 100%); overflow: hidden; margin-bottom: var(--space-2xl); }
   .banner-gradient { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(212,166,84,0.07) 0%, transparent 70%); }

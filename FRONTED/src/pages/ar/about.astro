@@ -11,7 +11,7 @@ const aboutSchema = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
   "name": "من نحن GINKVORA",
-  "description": "تعرف على تاريخ GINKVORA، وتقنيات الاستخلاص عالية النقاء، ومعايير مصادر المواد الخام لدينا.",
+  "description": "تورّد GINKVORA المكونات النباتية والنشطة حيوياً وتوفّر منتجات مخصصة بنظام OEM. تعرّفوا على بيانات الشركة ومراحل التوريد.",
   "url": "https://ginkvora.com/ar/about",
   "mainEntity": authors.map(author => ({
     "@type": "Person",
@@ -28,8 +28,8 @@ const aboutSchema = {
 ---
 
 <BaseLayout lang={lang}
-  title="الشركة المصنعة للمكونات النشطة حيوياً | حول GINKVORA"
-  description="تعرف على تحول GINKVORA من الجذور النباتية إلى حلول المكونات النشطة حيوياً المتقدمة لمصممي مستحضرات التجميل والمكملات الغذائية."
+  title="مورّد المكونات النشطة حيوياً | نبذة عن GINKVORA"
+  description="تورّد GINKVORA المكونات النباتية والنشطة حيوياً وتوفّر منتجات مخصصة بنظام OEM. تعرّفوا على بيانات الشركة ومراحل التوريد."
 >
   <script type="application/ld+json" set:html={JSON.stringify(aboutSchema)} slot="head" />
   <main class="about-page bg-noise">
@@ -39,9 +39,7 @@ const aboutSchema = {
       <div class="container banner-content">
         <span class="section-label fade-in-up">شركتنا</span>
         <h1 class="banner-title fade-in-up delay-1">خبرة نباتية. توريد المكونات النشطة حيوياً.</h1>
-        <p class="banner-desc fade-in-up delay-2">
-          ربط المصادر النباتية النقية مع الاستخلاص المخبري المتقدم لتوريد المكونات النشطة عالية النقاء للصناعات العالمية.
-        </p>
+        <p class="banner-desc fade-in-up delay-2">مستخلصات نباتية ومكونات تجميلية فعّالة وببتيدات ومكونات وظيفية، مع تخصيص بنظام OEM لتطبيقات العناية بالبشرة والتغذية والعافية.</p>
       </div>
     </header>
 
@@ -49,13 +47,10 @@ const aboutSchema = {
     <section class="container section intro-section" aria-label="نظرة عامة على الشركة">
       <div class="intro-grid">
         <div class="intro-left reveal">
-          <h2>طبيعة نقية، علم موثق</h2>
-          <p>
-            تأسست GINKVORA مع الالتزام بالنقاء الكيميائي والسلامة النباتية، وتطورت لتصبح مصنعاً متميزاً ومطوراً مخصصاً لمستخلصات النباتات الطبيعية ذات القيمة العالية والمركبات المعزولة لقطاع B2B.
-          </p>
-          <p>
-            نحن ندير سلسلة إمداد شاملة تمتد من مناطق مصادر النباتات المحلية المعتمدة، ومنشآت الاستخلاص بالمذيبات وثاني أكسيد الكربون فوق الحرج الحديثة، إلى مختبر البحث والتطوير المتقدم في شيان.
-          </p>
+          <h2>نبذة عن GINKVORA</h2>
+          <p>تورّد GINKVORA المستخلصات النباتية والمكونات التجميلية الفعّالة والببتيدات والمكونات الوظيفية لتطبيقات العناية بالبشرة والتغذية والعافية، إلى جانب خدمات تخصيص المنتجات بنظام OEM.</p>
+          <p>نخدم الموزعين وبائعي إعادة البيع ومطوّري التركيبات والمصنّعين حول العالم. كما نورّد المواد الخام التجميلية لصالونات التجميل، ونوفّر منتجات مخصصة بنظام OEM لمؤسسات إدارة الصحة.</p>
+          <p>نتخذ من شيآن في الصين مقراً لنا، وننسّق توريد المكونات وتحديد المواصفات والوثائق والتسليم الدولي. هدفنا واضح: مساعدة العملاء على اختيار المكونات المناسبة وتطوير منتجات مخصصة، بمتطلبات واضحة ودعم عملي وجهة اتصال مباشرة.</p>
           <div class="mission-box">
             <span class="mission-title">مهمتنا الأساسية</span>
             <blockquote class="mission-text">
@@ -81,42 +76,82 @@ const aboutSchema = {
       </div>
     </section>
 
-    <!-- Core Extraction Values -->
-    <section class="section values-section bg-deep" aria-label="ميزاتنا التكنولوجية">
+    <!-- Company Information -->
+    <section class="container section company-section" aria-labelledby="company-information">
+      <div class="company-grid">
+        <div class="reveal">
+          <span class="section-label">بيانات الشركة</span>
+          <h2 id="company-information">معلومات الشركة</h2>
+        </div>
+        <dl class="company-card glass reveal">
+          <div><dt>الاسم القانوني للشركة</dt><dd dir="ltr">Shaanxi Ginkvora Biotechnology Co., Ltd.</dd></div>
+          <div><dt>رقم <bdi dir="ltr">D-U-N-S®</bdi></dt><dd dir="ltr">975262249</dd></div>
+          <div><dt>العنوان المسجّل</dt><dd dir="ltr"><address>Room 502, Unit 1, Building 16,<br />CR Land Future City Chenxi, Gangfeng Road,<br />International Trade &amp; Logistics Park,<br />Xi'an, Shaanxi, China</address></dd></div>
+          <div><dt>البريد الإلكتروني للاستفسارات التجارية</dt><dd dir="ltr"><a href="mailto:inquiry@ginkvora.com">inquiry@ginkvora.com</a></dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Managed Sourcing Stages -->
+    <section class="section values-section bg-deep" aria-labelledby="how-we-work">
       <div class="container">
         <div class="section-header">
-          <span class="section-label">الكفاءة العلمية</span>
-          <h2 class="section-title">عملية الاستخلاص الصناعي لدينا</h2>
-          <p class="section-desc">
-            الجمع بين الحكمة العشبية التقليدية وتقنيات العزل التحليلي المتطورة.
-          </p>
+          <span class="section-label">كيف نعمل</span>
+          <h2 class="section-title" id="how-we-work">جهة اتصال واحدة. أربع مراحل مُنسّقة.</h2>
+          <p class="section-desc">عند الشراء من GINKVORA، تتعامل مع جهة اتصال واحدة تنسّق التوريد والوثائق والتحقق من الدفعات والتسليم.</p>
         </div>
-
-        <div class="grid-3">
+        <div class="stages-grid">
           <article class="value-card glass reveal">
-            <div class="value-icon">🔬</div>
-            <h3>عزل مدفوع بالنقاء</h3>
-            <p>
-              نركز على عزل المكونات الأحادية النشطة (مثل NMN و PQQ وجلابريدين) بدرجات نقاء قياسية تبلغ ≥98% و ≥99% باستخدام أنظمة الكروماتوغرافيا المتقدمة.
-            </p>
+            <div class="value-icon" aria-hidden="true">01</div>
+            <h3>تقييم المورّدين والمواصفات</h3><p>نقيّم المنتجين ونؤكد درجة المكوّن ومواصفاته ومتطلبات الطلب قبل الشراء.</p>
           </article>
-
-          <article class="value-card glass reveal reveal-delay-1">
-            <div class="value-icon">⚙️</div>
-            <h3>طرق استخلاص صديقة للبيئة</h3>
-            <p>
-              نستخدم تقنية استخلاص ثاني أكسيد الكربون فوق الحرج (sCO2) والعمليات المائية ذات الحرارة المنخفضة للتخلص من المذيبات الكيميائية المتبقية السامة وحماية المركبات النشطة.
-            </p>
+          <article class="value-card glass reveal">
+            <div class="value-icon" aria-hidden="true">02</div>
+            <h3>وثائق الدفعة</h3><p>ننسّق توفير شهادة التحليل (COA) الخاصة بكل دفعة والوثائق الداعمة ذات الصلة، بما فيها MSDS وTDS وتقارير الاختبار المتاحة، وفقاً للمنتج ومتطلباتكم المتعلقة بالوثائق.</p>
           </article>
-
-          <article class="value-card glass reveal reveal-delay-2">
-            <div class="value-icon">🛡️</div>
-            <h3>سجلات جودة قابلة للتتبع</h3>
-            <p>
-              تخضع كل دفعة مصنعة لاختبارات صارمة للهوية والنقاء والمعادن الثقيلة والميكروبات وبقايا المبيدات. تتوفر تقارير التحقق من المختبرات الخارجية (SGS/Eurofins) عند الطلب.
-            </p>
+          <article class="value-card glass reveal">
+            <div class="value-icon" aria-hidden="true">03</div>
+            <h3>التحقق من الجودة</h3><p>نراجع نتائج الدفعة مقابل المواصفات المتفق عليها قبل الشحن. وبحسب المكوّن، قد تشمل هذه النتائج النقاء والمحتوى الكمي باستخدام HPLC، والمعادن الثقيلة، والمذيبات المتبقية، والحدود الميكروبيولوجية. ويُتفق على متطلبات الاختبارات الإضافية قبل تأكيد الطلب.</p>
+          </article>
+          <article class="value-card glass reveal">
+            <div class="value-icon" aria-hidden="true">04</div>
+            <h3>التعبئة والتسليم</h3><p>نرتّب الشحن السريع أو الجوي أو البحري وفق شروط Incoterms المتفق عليها، ونؤكد معكم متطلبات التعبئة ومواعيد الإرسال. ويمكن ترتيب التعبئة مع الطرد بالنيتروجين للمكونات الفعّالة الحساسة الملائمة لهذه الطريقة.</p>
           </article>
         </div>
+        <p class="process-note">طوال العملية، تتوفر لكم جهة اتصال مباشرة للاستفسار عن المواصفات والوثائق ومستجدات التسليم.</p>
+      </div>
+    </section>
+
+    <!-- Authors Section -->
+    <section class="container section authors-section" aria-label="مستشارونا والمتعاونون التقنيون">
+      <div class="section-header">
+        <span class="section-label">الخبرة والتعاون</span>
+        <h2>مستشارونا والمتعاونون التقنيون</h2>
+        <p class="section-desc">تعرّفوا على المتخصصين المستقلين الذين يتعاونون مع GINKVORA في المشاريع العلمية وتطوير التركيبات والشؤون التنظيمية والمشاريع التجارية.</p>
+      </div>
+
+      <div class="authors-grid">
+        {authors.map((author) => (
+          <div class="author-card glass reveal">
+            <div class="author-avatar-wrapper">
+              <img
+                src={urlFor(author.avatar).width(160).height(160).fit('crop').url()}
+                alt={author.name}
+                class="author-avatar"
+                width="160"
+                height="160"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="author-info">
+              <h3>{getLocalizedField(author, 'name', lang) || author.name}</h3>
+              {(getLocalizedField(author, 'title', lang) || author.title) && <p class="author-title">{getLocalizedField(author, 'title', lang) || author.title}</p>}
+              {(getLocalizedField(author, 'credentials', lang) || author.credentials) && <span class="author-creds">{getLocalizedField(author, 'credentials', lang) || author.credentials}</span>}
+              {(getLocalizedField(author, 'bio', lang) || author.bio) && <p class="author-bio">{getLocalizedField(author, 'bio', lang) || author.bio}</p>}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
 
@@ -155,45 +190,10 @@ const aboutSchema = {
         <div class="timeline-item reveal reveal-delay-3">
           <div class="timeline-badge">2026</div>
           <div class="timeline-content glass">
-            <h3>الخدمات اللوجستية العالمية والمنصة الرقمية</h3>
+            <h3>الخدمات اللوجستية العالمية وإطلاق المنصة الرقمية</h3>
             <p>أطلقنا شبكة إمداد دولية عالية الأداء تخدم مكملات العناية بالبشرة والرياضة في أكثر من 50 دولة مع مراكز لوجستية محسنة.</p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Authors Section -->
-    <section class="container section authors-section" aria-label="خبراؤنا العلميون">
-      <div class="section-header">
-        <span class="section-label">الخبرة والجودة</span>
-        <h2>فريقنا العلمي والتنظيمي</h2>
-        <p class="section-desc">
-          تعرف على الباحثين والمطورين وخبراء مراقبة الجودة وراء المكونات النشطة الحيوية النباتية النقية من GINKVORA.
-        </p>
-      </div>
-
-      <div class="authors-grid">
-        {authors.map((author) => (
-          <div class="author-card glass reveal">
-            <div class="author-avatar-wrapper">
-              <img
-                src={urlFor(author.avatar).width(160).height(160).fit('crop').url()}
-                alt={author.name}
-                class="author-avatar"
-                width="160"
-                height="160"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div class="author-info">
-              <h3>{getLocalizedField(author, 'name', lang) || author.name}</h3>
-              {(getLocalizedField(author, 'title', lang) || author.title) && <p class="author-title">{getLocalizedField(author, 'title', lang) || author.title}</p>}
-              {(getLocalizedField(author, 'credentials', lang) || author.credentials) && <span class="author-creds">{getLocalizedField(author, 'credentials', lang) || author.credentials}</span>}
-              {(getLocalizedField(author, 'bio', lang) || author.bio) && <p class="author-bio">{getLocalizedField(author, 'bio', lang) || author.bio}</p>}
-            </div>
-          </div>
-        ))}
       </div>
     </section>
 
@@ -212,6 +212,26 @@ const aboutSchema = {
 </BaseLayout>
 
 <style>
+  .company-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 3rem; align-items: start; }
+  .company-grid h2 { font-size: clamp(1.75rem, 3vw, 2.25rem); margin-top: 0.5rem; }
+  .company-card { margin: 0; padding: 2rem; border-radius: var(--radius-lg); min-width: 0; }
+  .company-card > div { padding: 1.25rem 0; border-bottom: 1px solid var(--color-border); }
+  .company-card > div:first-child { padding-top: 0; }
+  .company-card > div:last-child { padding-bottom: 0; border-bottom: 0; }
+  .company-card dt { color: var(--color-primary-light); font-size: 0.8rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .company-card dd { margin: 0; color: var(--color-text); line-height: 1.75; overflow-wrap: anywhere; }
+  .company-card address { font-style: normal; }
+  .company-card a:hover { text-decoration: underline; }
+  .stages-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem; }
+  .stages-grid .value-card { text-align: start; }
+  .stages-grid .value-icon { color: var(--color-primary-light); font-family: var(--font-mono); font-size: 1.5rem; }
+  .process-note { text-align: center; max-width: 760px; margin: 2rem auto 0; color: var(--color-text-secondary); }
+  @media (max-width: 768px) {
+    .company-grid, .stages-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+    .company-card { padding: 1.5rem; }
+  }
+
+
   .about-page {
     padding-bottom: var(--space-4xl);
   }
