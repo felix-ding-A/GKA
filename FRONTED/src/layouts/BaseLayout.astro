@@ -148,11 +148,12 @@ const organizationSchema = {
       
       // Load stored consent or default to denied for EU/Global compliance
       const storedConsent = localStorage.getItem('cookie-consent');
-      if (storedConsent === 'accepted') {
+      const analyticsConsentGranted = storedConsent === 'accepted';
+      if (analyticsConsentGranted) {
         gtag('consent', 'default', {
-          'ad_storage': 'granted',
-          'ad_user_data': 'granted',
-          'ad_personalization': 'granted',
+          'ad_storage': 'denied',
+          'ad_user_data': 'denied',
+          'ad_personalization': 'denied',
           'analytics_storage': 'granted'
         });
       } else {
@@ -163,6 +164,18 @@ const organizationSchema = {
           'analytics_storage': 'denied'
         });
       }
+
+      // Clarity is loaded only after analytics consent. Queue the consent
+      // decision before its script is requested so it can never set cookies
+      // while the visitor is undecided or has declined.
+      window.clarity = window.clarity || function () {
+        (window.clarity.q = window.clarity.q || []).push(arguments);
+      };
+      window.gkvAnalyticsConsentGranted = analyticsConsentGranted;
+      window.clarity('consentv2', {
+        ad_Storage: 'denied',
+        analytics_Storage: analyticsConsentGranted ? 'granted' : 'denied'
+      });
     </script>
 
     <!-- Google Tag Manager (Async non-blocking container loader for GA4 & Clarity) -->
@@ -180,6 +193,15 @@ const organizationSchema = {
         })(window,document,'script','dataLayer',gtmId);
       </script>
     )}
+
+    <script is:inline>
+      // The GTM Clarity tag listens for this event instead of firing on page
+      // initialization. Existing consent is replayed on every full page load.
+      if (window.gkvAnalyticsConsentGranted && !window.gkvClarityLoadRequested) {
+        window.gkvClarityLoadRequested = true;
+        window.dataLayer.push({ event: 'gkv_analytics_consent_granted' });
+      }
+    </script>
 
     <!-- Primary Meta -->
     <title>{fullTitle}</title>
@@ -399,6 +421,81 @@ const organizationSchema = {
       })();
     </script>
 
+    <!-- High-value funnel tracking: CTA intent, COA downloads, and catalog searches. -->
+    <script is:inline>
+      (function () {
+        function sendEvent(name, parameters) {
+          if (typeof gtag !== 'function') return;
+          gtag('event', name, Object.assign({
+            page_language: document.documentElement.lang || 'en',
+            page_path: window.location.pathname,
+          }, parameters || {}));
+        }
+
+        function productSlug() {
+          var match = window.location.pathname.match(/\/products\/([^/?#]+)/);
+          return match ? decodeURIComponent(match[1]) : undefined;
+        }
+
+        function trackSearch(term, source) {
+          var normalized = String(term || '').trim();
+          if (!normalized) return;
+          var key = normalized.toLowerCase();
+          var now = Date.now();
+          if (window.gkvLastCatalogSearch && window.gkvLastCatalogSearch.key === key && now - window.gkvLastCatalogSearch.time < 3000) return;
+          window.gkvLastCatalogSearch = { key: key, time: now };
+          sendEvent('search', {
+            search_term: normalized,
+            search_context: 'product_catalog',
+            search_source: source,
+          });
+        }
+
+        if (!window.gkvBusinessTrackingBound) {
+          window.gkvBusinessTrackingBound = true;
+          document.addEventListener('click', function (event) {
+            var target = event.target instanceof Element ? event.target : null;
+            if (!target) return;
+
+            var tracked = target.closest('[data-gkv-event]');
+            if (tracked) {
+              var eventName = tracked.getAttribute('data-gkv-event');
+              if (eventName) {
+                sendEvent(eventName, {
+                  cta_location: tracked.getAttribute('data-gkv-location') || undefined,
+                  product_slug: productSlug(),
+                  link_url: tracked instanceof HTMLAnchorElement ? tracked.href : undefined,
+                });
+              }
+            }
+
+            var searchButton = target.closest('#hero-search-trigger');
+            if (searchButton) {
+              var input = document.getElementById('hero-product-search');
+              trackSearch(input && 'value' in input ? input.value : '', 'button');
+            }
+
+            var quickSearch = target.closest('.hero-tag-btn[data-search]');
+            if (quickSearch) trackSearch(quickSearch.getAttribute('data-search'), 'quick_tag');
+          });
+        }
+
+        function bindCatalogSearch() {
+          var input = document.getElementById('hero-product-search');
+          if (!input || input.dataset.gkvTrackingBound === 'true') return;
+          input.dataset.gkvTrackingBound = 'true';
+          input.addEventListener('change', function () { trackSearch(input.value, 'input'); });
+          input.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') trackSearch(input.value, 'input_enter');
+          });
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindCatalogSearch);
+        else bindCatalogSearch();
+        document.addEventListener('astro:page-load', bindCatalogSearch);
+      })();
+    </script>
+
     <!-- Cookie Consent Minimized Icon -->
     <button id="cookie-minimized-icon" class="cookie-minimized hidden" aria-label="Cookie Settings">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -508,11 +605,23 @@ const organizationSchema = {
           showIcon();
           if (typeof gtag === 'function') {
             gtag('consent', 'update', {
-              'ad_storage': analyticsEnabled ? 'granted' : 'denied',
-              'ad_user_data': analyticsEnabled ? 'granted' : 'denied',
-              'ad_personalization': analyticsEnabled ? 'granted' : 'denied',
+              'ad_storage': 'denied',
+              'ad_user_data': 'denied',
+              'ad_personalization': 'denied',
               'analytics_storage': analyticsEnabled ? 'granted' : 'denied'
             });
+          }
+          window.gkvAnalyticsConsentGranted = analyticsEnabled;
+          if (typeof window.clarity === 'function') {
+            window.clarity('consentv2', {
+              ad_Storage: 'denied',
+              analytics_Storage: analyticsEnabled ? 'granted' : 'denied'
+            });
+          }
+          if (analyticsEnabled && !window.gkvClarityLoadRequested) {
+            window.gkvClarityLoadRequested = true;
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ event: 'gkv_analytics_consent_granted' });
           }
         };
 

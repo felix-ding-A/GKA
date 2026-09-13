@@ -296,7 +296,7 @@ const breadcrumbSchema = {
           <p class="product-short-desc">{localShortDesc}</p>
 
           <div class="product-primary-action">
-            <a href="#inquiry-form-section" class="btn btn--gold btn--lg">
+            <a href="#inquiry-form-section" class="btn btn--gold btn--lg" data-gkv-event="request_sample_click" data-gkv-location="product_hero">
               {t('product.cta_rfq')}
             </a>
           </div>
@@ -339,6 +339,8 @@ const breadcrumbSchema = {
                 download 
                 class="btn btn--secondary" 
                 target="_blank"
+                data-gkv-event="coa_download"
+                data-gkv-location="product_support"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
@@ -507,7 +509,7 @@ const breadcrumbSchema = {
         <p class="inquiry-sub">
           Envíe su consulta y nuestro representante comercial se pondrá en contacto con usted en un plazo de 24 horas.
         </p>
-        <a href="/es/contact" class="btn btn--gold btn--lg">
+        <a href="/es/contact" class="btn btn--gold btn--lg" data-gkv-event="request_sample_click" data-gkv-location="product_inquiry_section">
           Ir al formulario de consulta →
         </a>
       </section>
