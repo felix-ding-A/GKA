@@ -216,7 +216,7 @@ const alternatePaths = getAlternatePaths(Astro.url, typedLang);
         </div>
 
         <!-- CTA Button -->
-        <a href={lp('/contact')} class="btn btn--primary btn--sm nav-cta" id="nav-cta-btn">
+        <a href={lp('/contact')} class="btn btn--primary btn--sm nav-cta" id="nav-cta-btn" data-gkv-event="request_sample_click" data-gkv-location="navbar_desktop">
           {t('nav.cta')}
           <svg class="rtl-mirror" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -265,7 +265,7 @@ const alternatePaths = getAlternatePaths(Astro.url, typedLang);
           </li>
         ))}
       </ul>
-      <a href={lp('/contact')} class="btn btn--primary" id="mobile-cta-btn" style="width: 100%; justify-content: center; margin-top: 1rem;">
+      <a href={lp('/contact')} class="btn btn--primary" id="mobile-cta-btn" data-gkv-event="request_sample_click" data-gkv-location="navbar_mobile" style="width: 100%; justify-content: center; margin-top: 1rem;">
         {t('nav.cta')}
       </a>
 

@@ -39,7 +39,7 @@ const lp = (path: string) => getLocalePath(lang as Lang, path);
         </div>
 
         <div class="cta-actions">
-          <a href={lp('/contact')} class="btn btn--primary btn--lg" id="cta-request-btn">
+          <a href={lp('/contact')} class="btn btn--primary btn--lg" id="cta-request-btn" data-gkv-event="request_sample_click" data-gkv-location="contact_cta_section">
             {t('cta.btn_sample')}
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
               <path d="M5 12h14M12 5l7 7-7 7"/>
