@@ -195,12 +195,33 @@ const organizationSchema = {
     )}
 
     <script is:inline>
-      // The GTM Clarity tag listens for this event instead of firing on page
-      // initialization. Existing consent is replayed on every full page load.
-      if (window.gkvAnalyticsConsentGranted && !window.gkvClarityLoadRequested) {
-        window.gkvClarityLoadRequested = true;
-        window.dataLayer.push({ event: 'gkv_analytics_consent_granted' });
-      }
+      // Clarity is non-critical. Wait until the page has loaded and the browser
+      // is idle so its recorder cannot compete with the LCP image.
+      window.gkvRequestClarityLoad = function () {
+        if (!window.gkvAnalyticsConsentGranted || window.gkvClarityLoadRequested || window.gkvClarityLoadScheduled) return;
+        window.gkvClarityLoadScheduled = true;
+
+        function fireClarityLoad() {
+          window.gkvClarityLoadScheduled = false;
+          if (!window.gkvAnalyticsConsentGranted || window.gkvClarityLoadRequested) return;
+          window.gkvClarityLoadRequested = true;
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event: 'gkv_analytics_consent_granted' });
+        }
+
+        function scheduleWhenIdle() {
+          if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(fireClarityLoad, { timeout: 2000 });
+          } else {
+            window.setTimeout(fireClarityLoad, 1000);
+          }
+        }
+
+        if (document.readyState === 'complete') scheduleWhenIdle();
+        else window.addEventListener('load', scheduleWhenIdle, { once: true });
+      };
+
+      window.gkvRequestClarityLoad();
     </script>
 
     <!-- Primary Meta -->
@@ -301,8 +322,6 @@ const organizationSchema = {
     <!-- Performance: Third-party DNS Prefetch & Preconnect -->
     <link rel="preconnect" href="https://chat.ginkvora.com" crossorigin />
     <link rel="dns-prefetch" href="https://chat.ginkvora.com" />
-    <link rel="preconnect" href="https://www.clarity.ms" crossorigin />
-    <link rel="dns-prefetch" href="https://www.clarity.ms" />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="preconnect" href="https://cdn.sanity.io" crossorigin />
 
@@ -425,8 +444,9 @@ const organizationSchema = {
     <script is:inline>
       (function () {
         function sendEvent(name, parameters) {
-          if (typeof gtag !== 'function') return;
-          gtag('event', name, Object.assign({
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push(Object.assign({
+            event: name,
             page_language: document.documentElement.lang || 'en',
             page_path: window.location.pathname,
           }, parameters || {}));
@@ -618,10 +638,8 @@ const organizationSchema = {
               analytics_Storage: analyticsEnabled ? 'granted' : 'denied'
             });
           }
-          if (analyticsEnabled && !window.gkvClarityLoadRequested) {
-            window.gkvClarityLoadRequested = true;
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({ event: 'gkv_analytics_consent_granted' });
+          if (analyticsEnabled && typeof window.gkvRequestClarityLoad === 'function') {
+            window.gkvRequestClarityLoad();
           }
         };
 

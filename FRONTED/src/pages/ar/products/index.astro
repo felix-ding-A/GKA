@@ -247,7 +247,7 @@ const itemListSchema = {
         </div>
 
         <div class="products-grid" id="products-grid" data-current-page={currentPage}>
-          {products.map((prod) => {
+          {products.map((prod, index) => {
             const localShortDesc = (getLocalizedField(prod, 'shortDescription', lang) ?? prod.shortDescription) as string | undefined;
             return (
               <article
@@ -269,7 +269,8 @@ const itemListSchema = {
                       <img
                         src={urlFor(prod.heroImage).width(400).url()}
                         alt={prod.name}
-                        loading="lazy"
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        fetchpriority={index === 0 ? 'high' : 'low'}
                         width="400"
                         height="300"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"

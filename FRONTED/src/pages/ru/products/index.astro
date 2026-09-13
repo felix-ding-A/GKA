@@ -216,7 +216,7 @@ const breadcrumbsSchema = {
         </div>
 
         <div id="product-grid" class="product-grid" data-current-page={currentPage}>
-          {products.map((product: any) => {
+          {products.map((product: any, index: number) => {
             const localShortDesc = (getLocalizedField(product, 'shortDescription', lang) ?? product.shortDescription) as string | undefined;
             return (
               <article
@@ -237,7 +237,8 @@ const breadcrumbsSchema = {
                       <img
                         src={urlFor(product.heroImage).width(400).url()}
                         alt={product.name}
-                        loading="lazy"
+                        loading={index === 0 ? 'eager' : 'lazy'}
+                        fetchpriority={index === 0 ? 'high' : 'low'}
                         width="400"
                         height="300"
                         class="card-img"

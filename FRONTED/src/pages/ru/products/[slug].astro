@@ -207,6 +207,15 @@ const breadcrumbSchema = {
 >
   <script type="application/ld+json" set:html={JSON.stringify(productSchema)} slot="head" />
   <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} slot="head" />
+  <link
+    rel="preload"
+    as="image"
+    href={urlFor(product.heroImage).width(1200).format('webp').url()}
+    imagesrcset={`${urlFor(product.heroImage).width(600).format('webp').url()} 600w, ${urlFor(product.heroImage).width(900).format('webp').url()} 900w, ${urlFor(product.heroImage).width(1200).format('webp').url()} 1200w`}
+    imagesizes="(max-width: 600px) 100vw, (max-width: 900px) 90vw, (max-width: 1200px) 48vw, 600px"
+    type="image/webp"
+    slot="head"
+  />
 
   <main class="product-detail-page bg-noise">
     <div class="container page-content">
