@@ -69,24 +69,24 @@ const shouldNoindex = noindex || isTrackingOrSearch;
 
 const cookieCopyByLocale = {
   en: {
-    message: 'We use cookies to improve your browsing experience, analyze site traffic, and deliver technical support. By clicking "Accept All", you agree to our use of cookies.',
+    message: 'We use cookies to improve your browsing experience, analyze site traffic, measure advertising conversions, and deliver technical support. By clicking "Accept All", you agree to this use of cookies.',
     privacyHref: '/privacy', privacyLabel: 'Privacy Policy', essential: 'Essential only', accept: 'Accept All',
-    manage: 'Manage preferences', analytics: 'Analytics cookies', analyticsHelp: 'Help us understand how the site is used.', save: 'Save preferences',
+    manage: 'Manage preferences', analytics: 'Analytics & advertising measurement cookies', analyticsHelp: 'Help us understand site use and measure whether ads lead to an inquiry. We do not use them for personalised advertising.', save: 'Save preferences',
   },
   es: {
-    message: 'Usamos cookies para mejorar tu experiencia de navegación, analizar el tráfico del sitio y ofrecer soporte técnico. Al hacer clic en «Aceptar todo», aceptas nuestro uso de cookies.',
+    message: 'Usamos cookies para mejorar tu experiencia de navegación, analizar el tráfico del sitio, medir conversiones publicitarias y ofrecer soporte técnico. Al hacer clic en «Aceptar todo», aceptas este uso de cookies.',
     privacyHref: '/es/privacy', privacyLabel: 'Política de privacidad', essential: 'Solo esenciales', accept: 'Aceptar todo',
-    manage: 'Gestionar preferencias', analytics: 'Cookies analíticas', analyticsHelp: 'Nos ayudan a comprender cómo se utiliza el sitio.', save: 'Guardar preferencias',
+    manage: 'Gestionar preferencias', analytics: 'Cookies analíticas y de medición publicitaria', analyticsHelp: 'Nos ayudan a comprender el uso del sitio y si los anuncios generan una consulta. No se usan para publicidad personalizada.', save: 'Guardar preferencias',
   },
   ru: {
-    message: 'Мы используем файлы cookie для улучшения работы сайта, анализа трафика и предоставления поддержки. Нажимая «Принять все», вы соглашаетесь с использованием файлов cookie.',
+    message: 'Мы используем cookie для улучшения работы сайта, анализа трафика, измерения рекламных конверсий и предоставления поддержки. Нажимая «Принять все», вы соглашаетесь с этим использованием cookie.',
     privacyHref: '/ru/privacy', privacyLabel: 'Подробнее', essential: 'Только необходимые', accept: 'Принять все',
-    manage: 'Настроить предпочтения', analytics: 'Аналитические cookie', analyticsHelp: 'Помогают нам понимать, как используется сайт.', save: 'Сохранить выбор',
+    manage: 'Настроить предпочтения', analytics: 'Аналитические cookie и cookie для измерения рекламы', analyticsHelp: 'Помогают понимать использование сайта и то, приводят ли объявления к запросу. Они не используются для персонализированной рекламы.', save: 'Сохранить выбор',
   },
   ar: {
-    message: 'نستخدم ملفات تعريف الارتباط لتحسين تجربة التصفح وتحليل حركة الزيارات وتقديم الدعم الفني. بالنقر على «قبول الكل»، فإنك توافق على استخدامنا لملفات تعريف الارتباط.',
+    message: 'نستخدم ملفات تعريف الارتباط لتحسين تجربة التصفح وتحليل حركة الزيارات وقياس التحويلات الإعلانية وتقديم الدعم الفني. بالنقر على «قبول الكل»، فإنك توافق على هذا الاستخدام لملفات تعريف الارتباط.',
     privacyHref: '/ar/privacy', privacyLabel: 'سياسة الخصوصية', essential: 'الضرورية فقط', accept: 'قبول الكل',
-    manage: 'إدارة التفضيلات', analytics: 'ملفات تعريف الارتباط للتحليلات', analyticsHelp: 'تساعدنا على فهم كيفية استخدام الموقع.', save: 'حفظ التفضيلات',
+    manage: 'إدارة التفضيلات', analytics: 'ملفات تعريف الارتباط للتحليلات وقياس الإعلانات', analyticsHelp: 'تساعدنا على فهم استخدام الموقع وقياس ما إذا كانت الإعلانات تؤدي إلى استفسار. لا نستخدمها للإعلانات المخصصة.', save: 'حفظ التفضيلات',
   },
 } as const;
 const cookieCopy = cookieCopyByLocale[lang as keyof typeof cookieCopyByLocale] ?? cookieCopyByLocale.en;
@@ -146,24 +146,22 @@ const organizationSchema = {
       window.dataLayer = window.dataLayer || [];
       function gtag() { window.dataLayer.push(arguments); }
       
-      // Load stored consent or default to denied for EU/Global compliance
-      const storedConsent = localStorage.getItem('cookie-consent');
-      const analyticsConsentGranted = storedConsent === 'accepted';
-      if (analyticsConsentGranted) {
-        gtag('consent', 'default', {
-          'ad_storage': 'denied',
-          'ad_user_data': 'denied',
-          'ad_personalization': 'denied',
-          'analytics_storage': 'granted'
-        });
-      } else {
-        gtag('consent', 'default', {
-          'ad_storage': 'denied',
-          'ad_user_data': 'denied',
-          'ad_personalization': 'denied',
-          'analytics_storage': 'denied'
-        });
+      // Consent v2 explicitly covers advertising conversion measurement. The
+      // preceding analytics-only choice is intentionally not reused.
+      const storedConsent = localStorage.getItem('cookie-consent-v2');
+      const measurementConsentGranted = storedConsent === 'accepted';
+      const consentDefaults = {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied'
+      };
+      if (measurementConsentGranted) {
+        consentDefaults.ad_storage = 'granted';
+        consentDefaults.ad_user_data = 'granted';
+        consentDefaults.analytics_storage = 'granted';
       }
+      gtag('consent', 'default', consentDefaults);
 
       // Clarity is loaded only after analytics consent. Queue the consent
       // decision before its script is requested so it can never set cookies
@@ -171,10 +169,10 @@ const organizationSchema = {
       window.clarity = window.clarity || function () {
         (window.clarity.q = window.clarity.q || []).push(arguments);
       };
-      window.gkvAnalyticsConsentGranted = analyticsConsentGranted;
+      window.gkvAnalyticsConsentGranted = measurementConsentGranted;
       window.clarity('consentv2', {
         ad_Storage: 'denied',
-        analytics_Storage: analyticsConsentGranted ? 'granted' : 'denied'
+        analytics_Storage: measurementConsentGranted ? 'granted' : 'denied'
       });
     </script>
 
@@ -565,7 +563,7 @@ const organizationSchema = {
 
     <script is:inline>
       function initCookieConsent() {
-        const consent = localStorage.getItem('cookie-consent');
+        const consent = localStorage.getItem('cookie-consent-v2');
         const banner = document.getElementById('cookie-consent-banner');
         const acceptBtn = document.getElementById('cookie-accept-btn');
         const declineBtn = document.getElementById('cookie-decline-btn');
@@ -621,12 +619,12 @@ const organizationSchema = {
         };
 
         const setConsent = (analyticsEnabled) => {
-          localStorage.setItem('cookie-consent', analyticsEnabled ? 'accepted' : 'declined');
+          localStorage.setItem('cookie-consent-v2', analyticsEnabled ? 'accepted' : 'declined');
           showIcon();
           if (typeof gtag === 'function') {
             gtag('consent', 'update', {
-              'ad_storage': 'denied',
-              'ad_user_data': 'denied',
+              'ad_storage': analyticsEnabled ? 'granted' : 'denied',
+              'ad_user_data': analyticsEnabled ? 'granted' : 'denied',
               'ad_personalization': 'denied',
               'analytics_storage': analyticsEnabled ? 'granted' : 'denied'
             });
@@ -668,7 +666,7 @@ const organizationSchema = {
           const isOpen = !preferences.classList.contains('hidden');
           preferences.classList.toggle('hidden', isOpen);
           newPreferencesBtn.setAttribute('aria-expanded', String(!isOpen));
-          newAnalyticsToggle.checked = localStorage.getItem('cookie-consent') === 'accepted';
+          newAnalyticsToggle.checked = localStorage.getItem('cookie-consent-v2') === 'accepted';
         });
 
         newSavePreferencesBtn.addEventListener('click', () => setConsent(newAnalyticsToggle.checked));
