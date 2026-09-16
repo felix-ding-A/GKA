@@ -42,7 +42,6 @@ const pageSchema = {
             </p>
             <div class="hero-actions">
               <a href="#inquiry-form-section" class="btn btn--gold">Request a Formulation Quote</a>
-              <a href="#otf-focus" class="btn btn--outline">Explore Technologies</a>
             </div>
           </div>
           <div class="hero-visual-col reveal reveal-delay-2">
@@ -204,12 +203,12 @@ const pageSchema = {
         </div>
 
         <div class="cap-card glass reveal reveal-delay-1">
-          <div class="cap-icon">⏳</div>
-          <h3>Sustained Release Matrix</h3>
+          <div class="cap-icon">⚪</div>
+          <h3>Custom Tablet Manufacturing</h3>
           <p>
-            Pellet and beadlet coating technologies designed to slowly release active compounds over 8-12 hours, maintaining steady-state plasma levels.
+            High-speed rotary tablet compression supporting film-coated, chewable, sublingual, and effervescent formats. Custom shapes, logo debossing, and tailored dissolution.
           </p>
-          <div class="cap-tag">Controlled Delivery</div>
+          <div class="cap-tag">Precision Compression</div>
         </div>
 
         <div class="cap-card glass reveal reveal-delay-2">
@@ -225,11 +224,12 @@ const pageSchema = {
       <div class="encap-footer-visual reveal mt-6">
         <div class="image-showcase glass">
           <img
-            src="/images/ginkvora Mixing and Blending of Raw Materials_600size.webp"
-            alt="Advanced raw material blending and formulation scale-up in GMP certified environment"
+            src="/images/ginkvora-advanced-delivery-systems-microencapsulation.webp"
+            alt="Advanced formulation technologies showing microencapsulation, liposomal delivery systems, and precision solid dosage forms for enhanced bioavailability"
             class="showcase-img"
-            width="800"
-            height="320"
+            width="1632"
+            height="656"
+            loading="lazy"
           />
         </div>
       </div>
@@ -509,6 +509,8 @@ const pageSchema = {
 
   .image-showcase {
     position: relative;
+    width: 100%;
+    max-width: 100%;
     border-radius: var(--radius-lg);
     border: 1px solid rgba(212, 166, 84, 0.15) !important;
     overflow: hidden;
@@ -517,6 +519,8 @@ const pageSchema = {
 
   .showcase-img {
     width: 100%;
+    max-width: 100%;
+    height: auto;
     display: block;
     object-fit: cover;
     aspect-ratio: 3/2;
@@ -655,8 +659,23 @@ const pageSchema = {
     margin-top: 0.5rem;
   }
 
+  .encap-footer-visual {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .encap-footer-visual .image-showcase {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .encap-footer-visual .showcase-img {
-    aspect-ratio: 5/2;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1632 / 656;
+    object-fit: cover;
   }
 
   /* --- Capabilities --- */
@@ -1002,7 +1021,10 @@ const pageSchema = {
     }
 
     .encap-footer-visual .showcase-img {
-      aspect-ratio: 3/2;
+      aspect-ratio: 1632 / 656;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
     }
   }
 

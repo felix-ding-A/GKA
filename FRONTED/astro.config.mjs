@@ -32,6 +32,7 @@ export default defineConfig({
         '/404',
         '/sitemap.xml', '/sitemap-index.xml', '/sitemap-static.xml',
         '/sitemap-products.xml', '/sitemap-posts.xml',
+        '/og-image.png',
         /^\/api\/.+/,
       ],
     },
