@@ -29,6 +29,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     if (isPersonalizedPage) {
       response.headers.set('Cache-Control', 'private, no-store');
+    } else if (isDetailPage) {
+      // Keep Astro/Vercel's ISR Cache-Control intact while allowing Cloudflare,
+      // when its narrow detail-page cache rule is enabled, to retain HTML for
+      // five minutes. Browsers ignore this Cloudflare-specific header.
+      response.headers.set('Cloudflare-CDN-Cache-Control', 'public, max-age=300, stale-while-revalidate=60');
     } else if (!isDetailPage) {
       response.headers.set('Cache-Control', 'public, max-age=300, s-maxage=900, stale-while-revalidate=86400');
     }
