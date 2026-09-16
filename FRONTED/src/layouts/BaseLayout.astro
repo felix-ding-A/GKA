@@ -150,18 +150,31 @@ const organizationSchema = {
       // preceding analytics-only choice is intentionally not reused.
       const storedConsent = localStorage.getItem('cookie-consent-v2');
       const measurementConsentGranted = storedConsent === 'accepted';
-      const consentDefaults = {
-        'ad_storage': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied',
-        'analytics_storage': 'denied'
-      };
-      if (measurementConsentGranted) {
-        consentDefaults.ad_storage = 'granted';
-        consentDefaults.ad_user_data = 'granted';
-        consentDefaults.analytics_storage = 'granted';
+
+      if (storedConsent) {
+        gtag('consent', 'default', {
+          'ad_storage': measurementConsentGranted ? 'granted' : 'denied',
+          'ad_user_data': measurementConsentGranted ? 'granted' : 'denied',
+          'ad_personalization': 'denied',
+          'analytics_storage': measurementConsentGranted ? 'granted' : 'denied'
+        });
+      } else {
+        // EEA 30 countries + UK + Switzerland: Strict GDPR/FADP opt-in compliance (default denied)
+        gtag('consent', 'default', {
+          'ad_storage': 'denied',
+          'ad_user_data': 'denied',
+          'ad_personalization': 'denied',
+          'analytics_storage': 'denied',
+          'region': ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'IS', 'LI', 'NO', 'GB', 'CH']
+        });
+        // Rest of the world (US, CA, AU, Asia, etc.): Default granted to enable ad conversions
+        gtag('consent', 'default', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'denied',
+          'analytics_storage': 'granted'
+        });
       }
-      gtag('consent', 'default', consentDefaults);
 
       // Clarity is loaded only after analytics consent. Queue the consent
       // decision before its script is requested so it can never set cookies
