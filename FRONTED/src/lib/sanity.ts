@@ -137,14 +137,37 @@ function removeUrlParam(urlStr: string, param: string): string {
   }
 }
 
+function toMediaProxyUrl(url: string): string {
+  return url.replace('https://cdn.sanity.io', '/media/images');
+}
+
+function wrapSanityImageBuilder(imageBuilder: any): any {
+  return new Proxy(imageBuilder, {
+    get(target, property) {
+      const value = Reflect.get(target, property, target);
+
+      if (property === 'url' && typeof value === 'function') {
+        return () => toMediaProxyUrl(value.call(target));
+      }
+
+      if (typeof value !== 'function') return value;
+
+      return (...args: any[]) => {
+        const result = value.apply(target, args);
+        return result && typeof result === 'object' && typeof result.url === 'function'
+          ? wrapSanityImageBuilder(result)
+          : result;
+      };
+    },
+  });
+}
+
 export function urlFor(source: any) {
   // If source is already a direct URL string (used in mock data or direct fetched URLs), return it directly
   if (typeof source === 'string' && source.startsWith('http')) {
-    let currentUrl = source.includes('cdn.sanity.io') 
-      ? source.replace('https://cdn.sanity.io', '/media/images') 
-      : source;
+    let currentUrl = source;
     const mockBuilder = {
-      url: () => currentUrl,
+      url: () => toMediaProxyUrl(currentUrl),
       width: (w: number) => {
         currentUrl = setUrlParam(currentUrl, 'w', w.toString());
         return mockBuilder;
@@ -201,12 +224,7 @@ export function urlFor(source: any) {
   }
   try {
     const b = builder.image(source).auto('format');
-    const originalUrl = b.url.bind(b);
-    b.url = () => {
-      const url = originalUrl();
-      return url ? url.replace('https://cdn.sanity.io', '/media/images') : '';
-    };
-    return b;
+    return wrapSanityImageBuilder(b);
   } catch (err) {
     let currentUrl = 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600&auto=format&fit=crop&q=80';
     const fallbackBuilder = {
