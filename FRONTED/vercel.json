@@ -60,7 +60,7 @@
   ],
   "rewrites": [
     { "source": "/media/images/:path*", "destination": "https://cdn.sanity.io/:path*" },
-    { "source": "/media/files/:path*", "destination": "https://files.sanity.io/:path*" }
+    { "source": "/media/files/:path*", "destination": "https://cdn.sanity.io/files/:path*" }
   ],
   "redirects": [
     { "source": "/blog/egcg-98-percent-green-tea-extract", "destination": "/insights/green-tea-extract-egcg-98-percent-ingredient", "permanent": true },

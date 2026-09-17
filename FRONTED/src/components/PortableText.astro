@@ -85,8 +85,9 @@ htmlContent = htmlContent.replace(/<img\s+(?![^>]*\bwidth=)([^>]*)\/?>/gi, (matc
 
 // Replace any raw sanity CDN domains in rich text / markdown HTML content
 htmlContent = htmlContent
+  .replace(/https:\/\/cdn\.sanity\.io\/files\//g, '/media/files/')
   .replace(/https:\/\/cdn\.sanity\.io/g, '/media/images')
-  .replace(/https:\/\/files\.sanity\.io/g, '/media/files');
+  .replace(/https:\/\/files\.sanity\.io(?:\/files)?\//g, '/media/files/');
 
 // Make external links open in a new tab
 htmlContent = htmlContent.replace(/<a\b([^>]*)>/gi, (match, attributes) => {
