@@ -141,6 +141,13 @@ function toMediaProxyUrl(url: string): string {
   return url.replace('https://cdn.sanity.io', '/media/images');
 }
 
+function toMediaFileProxyUrl(url: string): string {
+  return url
+    .replace('https://cdn.sanity.io/files/', '/media/files/')
+    .replace('https://files.sanity.io/files/', '/media/files/')
+    .replace('https://files.sanity.io/', '/media/files/');
+}
+
 function wrapSanityImageBuilder(imageBuilder: any): any {
   return new Proxy(imageBuilder, {
     get(target, property) {
@@ -467,10 +474,10 @@ export async function getProductBySlug(slug: string) {
     );
     if (data) {
       if (data.coaFile?.asset?.url) {
-        data.coaFile.asset.url = data.coaFile.asset.url.replace('https://files.sanity.io', '/media/files');
+        data.coaFile.asset.url = toMediaFileProxyUrl(data.coaFile.asset.url);
       }
       if (data.msdsFile?.asset?.url) {
-        data.msdsFile.asset.url = data.msdsFile.asset.url.replace('https://files.sanity.io', '/media/files');
+        data.msdsFile.asset.url = toMediaFileProxyUrl(data.msdsFile.asset.url);
       }
       return data;
     }
