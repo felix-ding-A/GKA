@@ -430,6 +430,12 @@ const organizationSchema = {
       (function () {
         window.gkvTrackLeadAndRedirect = function (redirectUrl, formType) {
           var leadId = (window.crypto && window.crypto.randomUUID) ? window.crypto.randomUUID() : ('gkv_' + Date.now() + '_' + Math.random().toString(36).slice(2));
+          var hasRedirected = false;
+          var redirectWhenSafe = function () {
+            if (hasRedirected) return;
+            hasRedirected = true;
+            window.location.assign(redirectUrl);
+          };
           window.dataLayer = window.dataLayer || [];
           window.dataLayer.push({
             event: 'gkv_generate_lead',
@@ -437,12 +443,16 @@ const organizationSchema = {
             form_type: formType,
             page_location: window.location.href,
             page_path: window.location.pathname,
+            // GTM invokes this after tags for this event have completed. It keeps
+            // the conversion request alive without making the form wait indefinitely.
+            eventCallback: redirectWhenSafe,
+            eventTimeout: 2000,
           });
 
-          // Give GTM a short interval to dispatch its beacon before navigation.
+          // Failsafe for script blockers or a GTM callback that never returns.
           window.setTimeout(function () {
-            window.location.assign(redirectUrl);
-          }, 300);
+            redirectWhenSafe();
+          }, 2500);
         };
       })();
     </script>
