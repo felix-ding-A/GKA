@@ -102,14 +102,27 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ ok: false, error: 'Unauthorized.' }, 401);
   }
 
-  let event: { type?: string; payload?: { id?: string; projectId?: string; target?: string } };
+  let event: {
+    type?: string;
+    payload?: {
+      id?: string;
+      projectId?: string;
+      project?: { id?: string };
+      target?: string;
+    };
+  };
   try {
     event = JSON.parse(rawBody);
   } catch {
     return json({ ok: false, error: 'Invalid JSON.' }, 400);
   }
 
-  if (event.type !== 'deployment.succeeded' || event.payload?.projectId !== PROJECT_ID || event.payload?.target !== 'production') {
+  // The Vercel dashboard calls the post-build event "Deployment Ready".
+  // Keep the former name too so an existing webhook configuration remains
+  // harmless if Vercel sends that variant.
+  const isDeploymentReady = event.type === 'deployment.ready' || event.type === 'deployment.succeeded';
+  const projectId = event.payload?.projectId ?? event.payload?.project?.id;
+  if (!isDeploymentReady || projectId !== PROJECT_ID || event.payload?.target !== 'production') {
     return json({ ok: true, skipped: true });
   }
 
