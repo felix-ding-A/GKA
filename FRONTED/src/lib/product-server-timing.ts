@@ -1,4 +1,4 @@
-type ProductTimingMetric = 'sanity' | 'related';
+type ProductTimingMetric = 'sanity' | 'relatedProducts' | 'relatedPosts';
 
 const roundDuration = (duration: number) => Math.max(0, Math.round(duration));
 
@@ -23,13 +23,14 @@ export function createProductServerTiming() {
 
     finish(responseHeaders: Headers, pathname: string) {
       const sanityMs = durations.get('sanity') ?? 0;
-      const relatedMs = durations.get('related') ?? 0;
+      const relatedProductsMs = durations.get('relatedProducts') ?? 0;
+      const relatedPostsMs = durations.get('relatedPosts') ?? 0;
       const dataMs = roundDuration(performance.now() - startedAt);
       const generatedAt = new Date().toISOString();
 
       responseHeaders.set(
         'Server-Timing',
-        `sanity;dur=${sanityMs};desc="Sanity product query", related;dur=${relatedMs};desc="Related content queries", product-data;dur=${dataMs};desc="Product data preparation"`,
+        `sanity;dur=${sanityMs};desc="Sanity product query", related-products;dur=${relatedProductsMs};desc="Related products query", related-posts;dur=${relatedPostsMs};desc="Related posts query", product-data;dur=${dataMs};desc="Product data preparation"`,
       );
       responseHeaders.set('X-GKV-Generated-At', generatedAt);
       responseHeaders.set('X-GKV-Product-Generation', '1');
@@ -42,7 +43,8 @@ export function createProductServerTiming() {
         message: 'Product page server timing',
         path: pathname,
         sanityMs,
-        relatedMs,
+        relatedProductsMs,
+        relatedPostsMs,
         dataMs,
         generatedAt,
       }));

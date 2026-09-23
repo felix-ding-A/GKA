@@ -32,12 +32,14 @@ const categoryRef = Array.isArray(product.category)
   ? product.category[0]?._ref
   : (product.category?._ref || product.categories?.[0]?._ref);
 
-const [relatedProductsResult, relatedPostsResult] = await serverTiming.measure('related', () =>
-  Promise.allSettled([
+const [relatedProductsResult, relatedPostsResult] = await Promise.allSettled([
+  serverTiming.measure('relatedProducts', () =>
     getRelatedProductsForProduct(product._id, categorySlug, categoryRef),
+  ),
+  serverTiming.measure('relatedPosts', () =>
     getRelatedPostsForProduct(product._id, categorySlug, categoryRef),
-  ]),
-);
+  ),
+]);
 const relatedProducts = relatedProductsResult.status === 'fulfilled' ? relatedProductsResult.value : [];
 const relatedPosts = relatedPostsResult.status === 'fulfilled' ? relatedPostsResult.value : [];
 
