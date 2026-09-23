@@ -123,6 +123,14 @@ export const POST: APIRoute = async ({ request }) => {
   const isDeploymentReady = event.type === 'deployment.ready' || event.type === 'deployment.succeeded';
   const projectId = event.payload?.projectId ?? event.payload?.project?.id;
   if (!isDeploymentReady || projectId !== PROJECT_ID || event.payload?.target !== 'production') {
+    console.info(JSON.stringify({
+      level: 'info',
+      message: 'Production detail-page prewarm skipped',
+      eventType: event.type ?? null,
+      projectId: projectId ?? null,
+      target: event.payload?.target ?? null,
+      isDeploymentReady,
+    }));
     return json({ ok: true, skipped: true });
   }
 
