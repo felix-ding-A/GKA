@@ -8,13 +8,15 @@ import PortableText from '../../../components/PortableText.astro';
 import FAQAccordion from '../../../components/FAQAccordion.astro';
 import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import RelatedSection from '../../../components/sections/RelatedSection.astro';
+import { createProductServerTiming } from '../../../lib/product-server-timing';
 import { useTranslations } from '../../../i18n/utils';
 
 const t = useTranslations(lang);
 
 const { slug } = Astro.params;
+const serverTiming = createProductServerTiming();
 
-const product = await getProductBySlug(slug);
+const product = await serverTiming.measure('sanity', () => getProductBySlug(slug));
 if (!product) {
   const redirect = slug ? await getProductRedirectByPreviousSlug(slug) : null;
   if (redirect?.slug && redirect.slug !== slug) {
@@ -30,16 +32,20 @@ const categoryRef = Array.isArray(product.category)
   ? product.category[0]?._ref
   : (product.category?._ref || product.categories?.[0]?._ref);
 
-const [relatedProductsResult, relatedPostsResult] = await Promise.allSettled([
-  getRelatedProductsForProduct(product._id, categorySlug, categoryRef),
-  getRelatedPostsForProduct(product._id, categorySlug, categoryRef),
-]);
+const [relatedProductsResult, relatedPostsResult] = await serverTiming.measure('related', () =>
+  Promise.allSettled([
+    getRelatedProductsForProduct(product._id, categorySlug, categoryRef),
+    getRelatedPostsForProduct(product._id, categorySlug, categoryRef),
+  ]),
+);
 const relatedProducts = relatedProductsResult.status === 'fulfilled' ? relatedProductsResult.value : [];
 const relatedPosts = relatedPostsResult.status === 'fulfilled' ? relatedPostsResult.value : [];
 
 if (relatedProductsResult.status === 'rejected' || relatedPostsResult.status === 'rejected') {
   console.warn('[Product page] Related content unavailable; rendering the primary product without it.');
 }
+
+serverTiming.finish(Astro.response.headers, Astro.url.pathname);
 
 const localName          = product.name;
 const localShortDesc     = (getLocalizedField(product, 'shortDescription', lang) ?? product.shortDescription) as string | undefined;
