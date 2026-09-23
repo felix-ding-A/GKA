@@ -6,6 +6,8 @@ export const prerender = false;
 const REPORT_SECRET_ENV = 'SPEED_INSIGHTS_REPORT_SECRET';
 const MAX_BATCHES = 200;
 const MAX_EVENTS = 50_000;
+const SLOW_TTFB_MS = 1_800;
+const MAX_SLOW_TTFB_EVENTS = 100;
 
 const json = (body: Record<string, unknown>, status = 200) => new Response(
   JSON.stringify(body),
@@ -70,6 +72,7 @@ export const GET: APIRoute = async ({ request }) => {
     }));
 
     const valuesByPathAndMetric = new Map<string, number[]>();
+    const slowTtfbEvents: Array<{ timestamp: string | null; path: string; valueMs: number }> = [];
     let eventCount = 0;
 
     for (const payload of payloads) {
@@ -82,6 +85,13 @@ export const GET: APIRoute = async ({ request }) => {
         const values = valuesByPathAndMetric.get(key) || [];
         values.push(event.value);
         valuesByPathAndMetric.set(key, values);
+        if (event.metricType === 'TTFB' && event.value > SLOW_TTFB_MS && slowTtfbEvents.length < MAX_SLOW_TTFB_EVENTS) {
+          slowTtfbEvents.push({
+            timestamp: Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : null,
+            path: event.path,
+            valueMs: event.value,
+          });
+        }
         eventCount += 1;
       }
     }
@@ -98,7 +108,9 @@ export const GET: APIRoute = async ({ request }) => {
       periodDays: days,
       batchesRead: candidates.length,
       metricEventsRead: eventCount,
+      metricUnit: 'milliseconds except CLS',
       metrics,
+      slowTtfbEvents: slowTtfbEvents.sort((left, right) => right.valueMs - left.valueMs),
       limitations: [
         'Speed Insights Drain exports normalized path values, not URL query strings.',
         'This report contains only aggregated metric values; no device IDs or visitor identifiers are returned.',
