@@ -10,10 +10,12 @@ import type { Lang } from '../../i18n/utils';
 import FAQAccordion from '../../components/FAQAccordion.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import TagBadge from '../../components/TagBadge.astro';
+import { createPostServerTiming } from '../../lib/post-server-timing';
 
 const { slug } = Astro.params;
+const serverTiming = createPostServerTiming();
 
-const post = await getPostBySlug(slug);
+const { value: post, queryMs: postQueryMs } = await serverTiming.measure(() => getPostBySlug(slug));
 
 if (!post) {
   const redirect = slug ? await getPostRedirectByPreviousSlug(slug) : null;
@@ -22,6 +24,8 @@ if (!post) {
   }
   return Astro.rewrite('/404');
 }
+
+serverTiming.finish(Astro.response.headers, Astro.url.pathname, postQueryMs);
 
 // Related cards are projected together with the post, avoiding a second
 // full-post collection request during ISR regeneration.
