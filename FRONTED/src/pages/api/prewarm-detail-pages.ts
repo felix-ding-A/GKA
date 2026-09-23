@@ -57,10 +57,23 @@ async function isValidSignature(rawBody: string, signature: string, secret: stri
   return constantTimeEquals(expected, signature.replace(/^sha1=/i, '').trim().toLowerCase());
 }
 
-async function warmPath(pathname: string) {
+function getWarmOrigin(deploymentUrl?: string) {
+  if (!deploymentUrl) return SITE_ORIGIN;
+
+  try {
+    const candidate = new URL(deploymentUrl.startsWith('http') ? deploymentUrl : `https://${deploymentUrl}`);
+    // A deployment URL bypasses Cloudflare's bot checks while remaining inside
+    // this Vercel project. Reject arbitrary hosts from a webhook payload.
+    return candidate.hostname.endsWith('.vercel.app') ? candidate.origin : SITE_ORIGIN;
+  } catch {
+    return SITE_ORIGIN;
+  }
+}
+
+async function warmPath(origin: string, pathname: string) {
   const startedAt = performance.now();
   try {
-    const response = await fetch(new URL(pathname, SITE_ORIGIN), {
+    const response = await fetch(new URL(pathname, origin), {
       headers: { 'x-gkv-prewarm': '1' },
       signal: AbortSignal.timeout(20_000),
     });
@@ -109,6 +122,7 @@ export const POST: APIRoute = async ({ request }) => {
       projectId?: string;
       project?: { id?: string };
       target?: string;
+      url?: string;
     };
   };
   try {
@@ -134,12 +148,14 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ ok: true, skipped: true });
   }
 
-  const results = await runWithConcurrency(WARM_PATHS, warmPath);
+  const warmOrigin = getWarmOrigin(event.payload?.url);
+  const results = await runWithConcurrency(WARM_PATHS, (pathname) => warmPath(warmOrigin, pathname));
   const failed = results.filter((result) => result.status !== 200);
   console.info(JSON.stringify({
     level: failed.length ? 'warning' : 'info',
     message: 'Production detail-page prewarm complete',
     deploymentId: event.payload.id,
+    warmOriginHost: new URL(warmOrigin).hostname,
     warmed: results.length,
     failed: failed.length,
     results,
