@@ -84,13 +84,23 @@ async function warmPath(origin: string, pathname: string) {
     return {
       pathname,
       status: response.status,
-      durationMs: Math.round(performance.now() - startedAt),
+      // fetch() resolves at response headers, so this is a comparable cold-path
+      // response-start measurement from the prewarm function, not full download time.
+      responseStartMs: Math.round(performance.now() - startedAt),
+      serverTiming: response.headers.get('server-timing'),
+      generatedAt: response.headers.get('x-gkv-generated-at'),
+      productGeneration: response.headers.get('x-gkv-product-generation'),
+      cloudflareCacheStatus: response.headers.get('cf-cache-status'),
     };
   } catch {
     return {
       pathname,
       status: 0,
-      durationMs: Math.round(performance.now() - startedAt),
+      responseStartMs: Math.round(performance.now() - startedAt),
+      serverTiming: null,
+      generatedAt: null,
+      productGeneration: null,
+      cloudflareCacheStatus: null,
     };
   }
 }
