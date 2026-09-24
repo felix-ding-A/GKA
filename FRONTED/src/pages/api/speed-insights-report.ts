@@ -8,6 +8,7 @@ const MAX_BATCHES = 200;
 const MAX_EVENTS = 50_000;
 const SLOW_TTFB_MS = 1_800;
 const MAX_SLOW_TTFB_EVENTS = 100;
+const MAX_MATCHED_METRIC_EVENTS = 100;
 
 const json = (body: Record<string, unknown>, status = 200) => new Response(
   JSON.stringify(body),
@@ -55,6 +56,9 @@ export const GET: APIRoute = async ({ request }) => {
   }
 
   const days = Math.max(1, Math.min(30, Number(new URL(request.url).searchParams.get('days') || 7)));
+  const requestUrl = new URL(request.url);
+  const pathFilter = requestUrl.searchParams.get('path')?.trim() || null;
+  const metricTypeFilter = requestUrl.searchParams.get('metricType')?.trim() || null;
   const after = Date.now() - days * 24 * 60 * 60 * 1000;
 
   try {
@@ -73,6 +77,12 @@ export const GET: APIRoute = async ({ request }) => {
 
     const valuesByPathAndMetric = new Map<string, number[]>();
     const slowTtfbEvents: Array<{ timestamp: string | null; path: string; valueMs: number }> = [];
+    const matchedMetricEvents: Array<{
+      timestamp: string | null;
+      path: string;
+      metricType: string;
+      value: number;
+    }> = [];
     let eventCount = 0;
 
     for (const payload of payloads) {
@@ -85,6 +95,15 @@ export const GET: APIRoute = async ({ request }) => {
         const values = valuesByPathAndMetric.get(key) || [];
         values.push(event.value);
         valuesByPathAndMetric.set(key, values);
+        if (pathFilter && event.path === pathFilter && (!metricTypeFilter || event.metricType === metricTypeFilter)
+          && matchedMetricEvents.length < MAX_MATCHED_METRIC_EVENTS) {
+          matchedMetricEvents.push({
+            timestamp: Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : null,
+            path: event.path,
+            metricType: event.metricType,
+            value: event.value,
+          });
+        }
         if (event.metricType === 'TTFB' && event.value > SLOW_TTFB_MS && slowTtfbEvents.length < MAX_SLOW_TTFB_EVENTS) {
           slowTtfbEvents.push({
             timestamp: Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : null,
@@ -111,6 +130,10 @@ export const GET: APIRoute = async ({ request }) => {
       metricUnit: 'milliseconds except CLS',
       metrics,
       slowTtfbEvents: slowTtfbEvents.sort((left, right) => right.valueMs - left.valueMs),
+      ...(pathFilter ? {
+        matchedMetricEvents: matchedMetricEvents.sort((left, right) =>
+          (right.timestamp || '').localeCompare(left.timestamp || '')),
+      } : {}),
       limitations: [
         'Speed Insights Drain exports normalized path values, not URL query strings.',
         'This report contains only aggregated metric values; no device IDs or visitor identifiers are returned.',
