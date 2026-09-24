@@ -15,6 +15,10 @@ const WARM_PATHS = [
   '/products/pdrn',
   '/products/galactoarabinan',
   '/products/ghk-cu',
+  // Confirmed by signed Speed Insights Drain events: cold detail-page TTFB
+  // exceeded 1.8s for these paths, so add them before widening the warm set.
+  '/products/luteolin',
+  '/products/liposomal-pterostilbene-50-70',
   '/insights/glabridin-complete-guide',
   '/insights/glabridin-b2b-sourcing-guide',
   '/insights/quercetin-food-sources',
