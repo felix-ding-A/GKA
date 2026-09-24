@@ -3,6 +3,7 @@ import type { APIRoute } from 'astro';
 export const prerender = false;
 
 const WEBHOOK_SECRET_ENV = 'VERCEL_PREWARM_WEBHOOK_SECRET';
+const AUTOMATION_BYPASS_SECRET_ENV = 'VERCEL_AUTOMATION_BYPASS_SECRET';
 const PROJECT_ID = 'prj_XmaLSOPPdqN12vZwCIaRHV0wcq0r';
 const SITE_ORIGIN = 'https://ginkvora.com';
 const MAX_CONCURRENCY = 3;
@@ -74,16 +75,26 @@ function getWarmOrigin(deploymentUrl?: string) {
   }
 }
 
-async function warmPath(origin: string, pathname: string) {
+async function warmPath(origin: string, pathname: string, automationBypassSecret: string) {
   const startedAt = performance.now();
   try {
     const response = await fetch(new URL(pathname, origin), {
-      headers: { 'x-gkv-prewarm': '1' },
+      headers: {
+        'x-gkv-prewarm': '1',
+        'x-vercel-protection-bypass': automationBypassSecret,
+      },
+      // Never follow a protection redirect to an SSO page and call it a warm.
+      redirect: 'manual',
       signal: AbortSignal.timeout(20_000),
     });
+    const isProduct = pathname.startsWith('/products/');
+    const expectedGeneration = isProduct
+      ? response.headers.get('x-gkv-product-generation') === '1'
+      : response.headers.get('x-gkv-insight-generation') === '1';
     return {
       pathname,
       status: response.status,
+      ok: response.ok && expectedGeneration,
       // fetch() resolves at response headers, so this is a comparable cold-path
       // response-start measurement from the prewarm function, not full download time.
       responseStartMs: Math.round(performance.now() - startedAt),
@@ -91,16 +102,19 @@ async function warmPath(origin: string, pathname: string) {
       generatedAt: response.headers.get('x-gkv-generated-at'),
       productGeneration: response.headers.get('x-gkv-product-generation'),
       cloudflareCacheStatus: response.headers.get('cf-cache-status'),
+      expectedGeneration,
     };
   } catch {
     return {
       pathname,
       status: 0,
+      ok: false,
       responseStartMs: Math.round(performance.now() - startedAt),
       serverTiming: null,
       generatedAt: null,
       productGeneration: null,
       cloudflareCacheStatus: null,
+      expectedGeneration: false,
     };
   }
 }
@@ -122,11 +136,20 @@ export const GET: APIRoute = async () => json({ ok: false, error: 'Method not al
 
 export const POST: APIRoute = async ({ request }) => {
   const secret = import.meta.env[WEBHOOK_SECRET_ENV];
+  const automationBypassSecret = import.meta.env[AUTOMATION_BYPASS_SECRET_ENV];
   const rawBody = await request.text();
   const signature = request.headers.get('x-vercel-signature');
 
   if (!secret || !signature || !(await isValidSignature(rawBody, signature, secret))) {
     return json({ ok: false, error: 'Unauthorized.' }, 401);
+  }
+
+  if (!automationBypassSecret) {
+    console.error(JSON.stringify({
+      level: 'error',
+      message: 'Production detail-page prewarm is missing its automation bypass secret',
+    }));
+    return json({ ok: false, error: 'Automation bypass is not configured.' }, 503);
   }
 
   let event: {
@@ -145,9 +168,8 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ ok: false, error: 'Invalid JSON.' }, 400);
   }
 
-  // The Vercel dashboard calls the post-build event "Deployment Ready".
-  // Keep the former name too so an existing webhook configuration remains
-  // harmless if Vercel sends that variant.
+  // The current Vercel dashboard calls the post-build event "Deployment Succeeded".
+  // Accept the legacy Ready name too, in case an older webhook configuration sends it.
   const isDeploymentReady = event.type === 'deployment.ready' || event.type === 'deployment.succeeded';
   const projectId = event.payload?.projectId ?? event.payload?.project?.id;
   if (!isDeploymentReady || projectId !== PROJECT_ID || event.payload?.target !== 'production') {
@@ -163,8 +185,11 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const warmOrigin = getWarmOrigin(event.payload?.url);
-  const results = await runWithConcurrency(WARM_PATHS, (pathname) => warmPath(warmOrigin, pathname));
-  const failed = results.filter((result) => result.status !== 200);
+  const results = await runWithConcurrency(
+    WARM_PATHS,
+    (pathname) => warmPath(warmOrigin, pathname, automationBypassSecret),
+  );
+  const failed = results.filter((result) => !result.ok);
   console.info(JSON.stringify({
     level: failed.length ? 'warning' : 'info',
     message: 'Production detail-page prewarm complete',
