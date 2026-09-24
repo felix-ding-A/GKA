@@ -47,6 +47,12 @@ function isSpeedEvent(value: unknown): value is SpeedEvent {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
 
+function matchesRouteGroup(path: string, routeGroup: string) {
+  // Speed Insights exports concrete normalized paths. This maps only the
+  // current dashboard group under investigation, without exposing visitors.
+  return routeGroup === '/products/[slug]' && /^\/products\/[^/]+\/?$/.test(path);
+}
+
 export const GET: APIRoute = async ({ request }) => {
   const secret = import.meta.env[REPORT_SECRET_ENV];
   const supplied = request.headers.get('authorization')?.replace(/^Bearer\s+/i, '').trim();
@@ -59,6 +65,7 @@ export const GET: APIRoute = async ({ request }) => {
   const requestUrl = new URL(request.url);
   const pathFilter = requestUrl.searchParams.get('path')?.trim() || null;
   const metricTypeFilter = requestUrl.searchParams.get('metricType')?.trim() || null;
+  const routeGroupFilter = requestUrl.searchParams.get('routeGroup')?.trim() || null;
   const after = Date.now() - days * 24 * 60 * 60 * 1000;
 
   try {
@@ -95,7 +102,12 @@ export const GET: APIRoute = async ({ request }) => {
         const values = valuesByPathAndMetric.get(key) || [];
         values.push(event.value);
         valuesByPathAndMetric.set(key, values);
-        if (pathFilter && event.path === pathFilter && (!metricTypeFilter || event.metricType === metricTypeFilter)
+        const isMatchedPath = pathFilter
+          ? event.path === pathFilter
+          : routeGroupFilter
+            ? matchesRouteGroup(event.path, routeGroupFilter)
+            : false;
+        if (isMatchedPath && (!metricTypeFilter || event.metricType === metricTypeFilter)
           && matchedMetricEvents.length < MAX_MATCHED_METRIC_EVENTS) {
           matchedMetricEvents.push({
             timestamp: Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : null,
@@ -130,7 +142,8 @@ export const GET: APIRoute = async ({ request }) => {
       metricUnit: 'milliseconds except CLS',
       metrics,
       slowTtfbEvents: slowTtfbEvents.sort((left, right) => right.valueMs - left.valueMs),
-      ...(pathFilter ? {
+      ...(pathFilter || routeGroupFilter ? {
+        routeGroup: routeGroupFilter,
         matchedMetricEvents: matchedMetricEvents.sort((left, right) =>
           (right.timestamp || '').localeCompare(left.timestamp || '')),
       } : {}),
