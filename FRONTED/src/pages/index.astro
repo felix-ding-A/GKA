@@ -15,27 +15,58 @@ import ExtractionProcessSection from '../components/sections/ExtractionProcessSe
 import InsightsPreviewSection from '../components/sections/InsightsPreviewSection.astro';
 import ContactCTASection from '../components/sections/ContactCTASection.astro';
 
-// Structured data for homepage
+// Structured data for homepage (WebSite + Organization Knowledge Graph for GEO & AI Search)
 const websiteSchema = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'GINKVORA',
-  url: 'https://ginkvora.com',
-  description: 'High-Purity Botanical & Bioactive Ingredient Supplier for formulators and B2B brands.',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: {
-      '@type': 'EntryPoint',
-      urlTemplate: 'https://ginkvora.com/products?q={search_term_string}'
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://ginkvora.com/#website',
+      name: 'GINKVORA',
+      url: 'https://ginkvora.com',
+      description: 'High-Purity Botanical Extracts & Longevity Actives B2B Raw Material Supplier.',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: 'https://ginkvora.com/products?q={search_term_string}',
+        },
+        'query-input': 'required name=search_term_string',
+      },
     },
-    'query-input': 'required name=search_term_string',
-  },
+    {
+      '@type': 'Organization',
+      '@id': 'https://ginkvora.com/#organization',
+      name: 'GINKVORA',
+      url: 'https://ginkvora.com',
+      logo: 'https://ginkvora.com/favicon.svg',
+      description: 'GINKVORA is a certified B2B supplier of high-purity botanical and bioactive raw materials for the cosmetic and health industries.',
+      knowsAbout: [
+        'High-Purity Botanical Extracts',
+        'Longevity Active Raw Materials',
+        'PDRN Cosmetic Raw Material',
+        'Bulk NMN Supply',
+        'Glabridin Powder',
+        'Liposomal Delivery Systems',
+        'Cellular Health Ingredients',
+        'Extracellular Matrix Science',
+      ],
+      areaServed: 'Global',
+      makesOffer: {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'B2B Bulk Ingredient Supply & Custom Formulation',
+        },
+      },
+    },
+  ],
 };
 ---
 
 <BaseLayout
-  title="High-Purity Botanical & Bioactive Ingredients | GINKVORA"
-  description="GINKVORA supplies botanical extracts, peptides, polynucleotides and functional actives for cosmetic, nutraceutical and health-product development — supported by clear specifications, documentation and dependable B2B supply."
+  title="High-Purity Botanical Extracts & Longevity Actives | B2B Raw Material Supplier | GINKVORA"
+  description="GINKVORA is a certified B2B supplier of high-purity botanical and bioactive raw materials for the cosmetic and health industries. We supply bulk active ingredients including NMN, PDRN, and Glabridin with full batch testing documentation."
   structuredData={websiteSchema}
   preloadHeroImage={true}
 >

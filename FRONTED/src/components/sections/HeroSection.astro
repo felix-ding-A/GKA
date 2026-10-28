@@ -61,6 +61,14 @@ const lp = (path: string) => getLocalePath(lang as Lang, path);
         </a>
       </div>
 
+      <!-- Static Category & Capability Micro-Pills (Guarantees instant comprehension on all devices) -->
+      <div class="hero-pills fade-in-up delay-3" aria-label="Core Capabilities">
+        <span class="hero-pill">{t('hero.pill_botanicals')}</span>
+        <span class="hero-pill">{t('hero.pill_peptides')}</span>
+        <span class="hero-pill">{t('hero.pill_longevity')}</span>
+        <span class="hero-pill">{t('hero.pill_supply')}</span>
+      </div>
+
       <!-- Role-based Routing Anchors -->
       <div class="hero-role-routing fade-in-up delay-4">
         <span class="role-title">{t('hero.role_title')}</span>
@@ -86,13 +94,24 @@ const lp = (path: string) => getLocalePath(lang as Lang, path);
     <!-- Right: ingredient showcase -->
     <div class="hero-right fade-in-up delay-2">
       <div class="ingredient-card-stack">
-        <!-- Central Molecule Graphic -->
+        <!-- Central Physical Macro Crystal & Purified Droplet Graphic -->
         <div class="central-glow-molecule animate-pulse-slow" aria-hidden="true">
           <div class="molecule-glow"></div>
+          <div class="central-crystal-core">
+            <img 
+              src="/images/raw-active-crystal-core.webp" 
+              alt="High-Purity Active Micro-Crystals and Purified Extract Droplet" 
+              class="crystal-core-img"
+              width="136"
+              height="136"
+              loading="eager"
+            />
+            <div class="crystal-core-rim"></div>
+          </div>
           <svg class="molecule-svg" width="220" height="220" viewBox="0 0 200 200" fill="none">
             <!-- Orbit rings -->
-            <circle cx="100" cy="100" r="50" stroke="rgba(212,166,84,0.12)" stroke-width="1.5" stroke-dasharray="3 3"/>
-            <circle cx="100" cy="100" r="75" stroke="rgba(224,120,48,0.08)" stroke-width="1" stroke-dasharray="6 4"/>
+            <circle cx="100" cy="100" r="50" stroke="rgba(212,166,84,0.15)" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <circle cx="100" cy="100" r="75" stroke="rgba(224,120,48,0.1)" stroke-width="1" stroke-dasharray="6 4"/>
             <circle cx="100" cy="100" r="22" fill="rgba(212,166,84,0.06)" stroke="rgba(212,166,84,0.3)" stroke-width="1.5"/>
             <circle cx="100" cy="100" r="6" fill="#d4a654"/>
             
@@ -114,46 +133,76 @@ const lp = (path: string) => getLocalePath(lang as Lang, path);
           </svg>
         </div>
 
-        <!-- Mini floating cards -->
+        <!-- Mini floating cards with laboratory & test credibility badges -->
         <div class="mini-card glass" style="--float-d:0.8s; top:8%; left:-8%;">
           <span class="mini-card-name">{t('hero.ingredient.nmn')}</span>
-          <span class="mini-card-purity">≥ 99%</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">≥ 99%</span>
+            <span class="mini-card-badge">HPLC Tested</span>
+          </div>
         </div>
         <div class="mini-card glass" style="--float-d:0s; top:0%; left:30%;">
           <span class="mini-card-name">{t('hero.ingredient.salmon_dna')}</span>
-          <span class="mini-card-purity">≥ 99%</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">≥ 99%</span>
+            <span class="mini-card-badge">COA Ready</span>
+          </div>
         </div>
         <div class="mini-card glass" style="--float-d:1.6s; top:12%; right:-8%;">
           <span class="mini-card-name">{t('hero.ingredient.egcg')}</span>
-          <span class="mini-card-purity">≥ 98%</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">≥ 98%</span>
+            <span class="mini-card-badge">HPLC Tested</span>
+          </div>
         </div>
         <div class="mini-card glass" style="--float-d:2.4s; top:28%; left:-18%;">
           <span class="mini-card-name">{t('hero.ingredient.glabridin')}</span>
-          <span class="mini-card-purity">≥ 98%</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">≥ 98%</span>
+            <span class="mini-card-badge">COA Ready</span>
+          </div>
         </div>
         <div class="mini-card glass" style="--float-d:3.2s; top:32%; right:-16%;">
           <span class="mini-card-name">{t('hero.ingredient.pqq')}</span>
-          <span class="mini-card-purity">≥ 99%</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">≥ 99%</span>
+            <span class="mini-card-badge">Pharma Grade</span>
+          </div>
         </div>
         <div class="mini-card glass" style="--float-d:1.2s; top:52%; left:-22%;">
           <span class="mini-card-name">{t('hero.ingredient.copper_tripeptide')}</span>
-          <span class="mini-card-purity">≥ 99%</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">≥ 99%</span>
+            <span class="mini-card-badge">HPLC Tested</span>
+          </div>
         </div>
         <div class="mini-card glass" style="--float-d:2.0s; top:54%; right:-18%;">
           <span class="mini-card-name">{t('hero.ingredient.glucoraphanin')}</span>
-          <span class="mini-card-purity">≥ 10%</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">≥ 10%</span>
+            <span class="mini-card-badge">COA Ready</span>
+          </div>
         </div>
         <div class="mini-card glass" style="--float-d:2.8s; top:72%; left:-10%;">
           <span class="mini-card-name">{t('hero.ingredient.quercetin')}</span>
-          <span class="mini-card-purity">≥ 98%</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">≥ 98%</span>
+            <span class="mini-card-badge">HPLC Tested</span>
+          </div>
         </div>
         <div class="mini-card glass" style="--float-d:3.6s; top:74%; right:-6%;">
           <span class="mini-card-name">{t('hero.ingredient.luteolin')}</span>
-          <span class="mini-card-purity">≥ 98%</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">≥ 98%</span>
+            <span class="mini-card-badge">COA Ready</span>
+          </div>
         </div>
         <div class="mini-card glass" style="--float-d:0.4s; bottom:2%; left:22%;">
           <span class="mini-card-name">{t('hero.ingredient.liposome_tech')}</span>
-          <span class="mini-card-purity">{t('hero.ingredient.delivery_system')}</span>
+          <div class="mini-card-meta">
+            <span class="mini-card-purity">{t('hero.ingredient.delivery_system')}</span>
+            <span class="mini-card-badge">Advanced Delivery</span>
+          </div>
         </div>
       </div>
     </div>
@@ -447,18 +496,82 @@ const lp = (path: string) => getLocalePath(lang as Lang, path);
     animation: pulse-slow 8s ease-in-out infinite;
   }
 
+  /* Static micro-pills */
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.65rem;
+    margin-top: 0.65rem;
+    align-items: center;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.825rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: rgba(212, 166, 84, 0.05);
+    border: 1px solid rgba(212, 166, 84, 0.18);
+    border-radius: 9999px;
+    letter-spacing: 0.01em;
+    backdrop-filter: blur(4px);
+    transition: all 0.25s ease;
+  }
+
+  .hero-pill:hover {
+    color: var(--color-primary-light);
+    border-color: rgba(212, 166, 84, 0.35);
+    background: rgba(212, 166, 84, 0.1);
+  }
+
+  /* Central physical crystal / droplet core */
+  .central-crystal-core {
+    position: absolute;
+    width: 136px;
+    height: 136px;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 35px rgba(212, 166, 84, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.85);
+    border: 1.5px solid rgba(212, 166, 84, 0.4);
+    background: radial-gradient(circle at center, #140d05 0%, #050402 100%);
+  }
+
+  .crystal-core-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: screen;
+    filter: contrast(1.15) brightness(1.08);
+  }
+
+  .crystal-core-rim {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, transparent 45%, rgba(6, 4, 2, 0.5) 80%, rgba(6, 4, 2, 0.95) 100%);
+    pointer-events: none;
+  }
+
   /* Mini cards */
   .mini-card {
     position: absolute;
     padding: 0.625rem 0.875rem;
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
-    border-color: rgba(212,166,84,0.15) !important;
+    gap: 0.25rem;
+    border-color: rgba(212,166,84,0.18) !important;
     animation: float var(--float-d, 0s) ease-in-out infinite;
     animation-delay: var(--float-d, 0s);
     animation-duration: 5s;
     white-space: nowrap;
+    backdrop-filter: blur(8px);
   }
 
   .mini-card-name {
@@ -468,10 +581,31 @@ const lp = (path: string) => getLocalePath(lang as Lang, path);
     color: var(--color-text);
   }
 
+  .mini-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
   .mini-card-purity {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     color: var(--color-primary);
+  }
+
+  .mini-card-badge {
+    font-family: var(--font-mono);
+    font-size: 0.58rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.12rem 0.35rem;
+    border-radius: 3px;
+    background: rgba(212, 166, 84, 0.12);
+    color: var(--color-primary-light);
+    border: 1px solid rgba(212, 166, 84, 0.28);
+    white-space: nowrap;
   }
 
   /* Wave */
@@ -501,14 +635,31 @@ const lp = (path: string) => getLocalePath(lang as Lang, path);
       text-align: center;
       padding-top: 1.5rem;
       padding-bottom: 5rem;
-      gap: 3rem;
+      gap: 2.5rem;
     }
     .hero-sub  { max-width: 100%; margin-inline: auto; }
     .hero-ctas { justify-content: center; }
     .hero-trust { justify-content: center; }
     .hero-label { justify-content: center; }
+    .hero-pills { justify-content: center; }
     .hero-right {
       display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero-pills {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+    }
+    .hero-pill {
+      justify-content: center;
+      padding: 0.45rem 0.5rem;
+      font-size: 0.775rem;
+      text-align: center;
+      white-space: nowrap;
     }
   }
 

@@ -19,18 +19,32 @@ const lang = 'es';
 
 const websiteSchema = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'GINKVORA',
-  url: 'https://ginkvora.com/es',
-  description: 'Proveedor de ingredientes botánicos y bioactivos de alta pureza para formuladores y marcas B2B.',
-  inLanguage: 'es-ES',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://ginkvora.com/es/#website',
+      name: 'GINKVORA',
+      url: 'https://ginkvora.com/es',
+      description: 'Proveedor B2B de Extractos Botánicos de Alta Pureza y Materias Primas Activas para Longevidad.',
+      inLanguage: 'es-ES',
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://ginkvora.com/#organization',
+      name: 'GINKVORA',
+      url: 'https://ginkvora.com',
+      logo: 'https://ginkvora.com/favicon.svg',
+      description: 'GINKVORA es un proveedor B2B certificado de materias primas botánicas y bioactivas de alta pureza para las industrias cosmética y de la salud.',
+      areaServed: 'Global',
+    },
+  ],
 };
 ---
 
 <BaseLayout
   lang={lang}
-  title="Proveedor de Ingredientes Botánicos y Bioactivos | GINKVORA"
-  description="GINKVORA suministra ingredientes botánicos y bioactivos de alta pureza para formuladores y marcas B2B."
+  title="Extractos Botánicos de Alta Pureza y Activos de Longevidad | Proveedor B2B | GINKVORA"
+  description="GINKVORA es un proveedor B2B certificado de materias primas botánicas y bioactivas de alta pureza para cosmética y nutracéuticos. Suministro al por mayor de NMN, PDRN y Glabridina con documentación de prueba de lote completa."
   structuredData={websiteSchema}
   preloadHeroImage={true}
 >

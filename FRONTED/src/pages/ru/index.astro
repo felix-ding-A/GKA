@@ -19,18 +19,32 @@ const lang = 'ru';
 
 const websiteSchema = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'GINKVORA',
-  url: 'https://ginkvora.com/ru',
-  description: 'Поставщик ботанических и биоактивных ингредиентов высокой чистоты для разработчиков и B2B брендов.',
-  inLanguage: 'ru-RU',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://ginkvora.com/ru/#website',
+      name: 'GINKVORA',
+      url: 'https://ginkvora.com/ru',
+      description: 'B2B поставщик высокочистых растительных экстрактов и сырья для долголетия.',
+      inLanguage: 'ru-RU',
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://ginkvora.com/#organization',
+      name: 'GINKVORA',
+      url: 'https://ginkvora.com',
+      logo: 'https://ginkvora.com/favicon.svg',
+      description: 'GINKVORA — сертифицированный B2B поставщик высокочистого растительного и биоактивного сырья для косметической и фармацевтической промышленности.',
+      areaServed: 'Global',
+    },
+  ],
 };
 ---
 
 <BaseLayout
   lang={lang}
-  title="Поставщик ботанических и биоактивных ингредиентов | GINKVORA"
-  description="GINKVORA поставляет высокочистые ботанические и биоактивные ингредиенты для разработчиков и B2B брендов."
+  title="Высокочистые растительные экстракты и активы долголетия | B2B Поставщик | GINKVORA"
+  description="GINKVORA — сертифицированный B2B поставщик высокочистого растительного и биоактивного сырья для косметики и БАД. Оптовые поставки NMN, PDRN и глабридина с полной документацией партий."
   structuredData={websiteSchema}
   preloadHeroImage={true}
 >

@@ -20,11 +20,25 @@ import ContactCTASection from '../../components/sections/ContactCTASection.astro
 
 const websiteSchema = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'GINKVORA',
-  url: 'https://ginkvora.com/ar',
-  description: 'مورد مكونات نباتية ونشطة حيوياً عالية النقاء للمصممين والعلامات التجارية B2B.',
-  inLanguage: 'ar-SA',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://ginkvora.com/ar/#website',
+      name: 'GINKVORA',
+      url: 'https://ginkvora.com/ar',
+      description: 'مورد B2B للمستخلصات النباتية عالية النقاء والمواد الخام النشطة لطول العمر.',
+      inLanguage: 'ar-SA',
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://ginkvora.com/#organization',
+      name: 'GINKVORA',
+      url: 'https://ginkvora.com',
+      logo: 'https://ginkvora.com/favicon.svg',
+      description: 'GINKVORA هي مورد B2B معتمد للمواد الخام النباتية والحيوية عالية النقاء لصناعات مستحضرات التجميل والصحة.',
+      areaServed: 'Global',
+    },
+  ],
 };
 
 
@@ -32,8 +46,8 @@ const websiteSchema = {
 
 <BaseLayout
   lang={lang}
-  title="مورد المكونات النباتية والنشطة حيوياً | GINKVORA"
-  description="توفر GINKVORA مكونات نباتية ونشطة حيوياً عالية النقاء للمصممين والعلامات التجارية B2B."
+  title="مستخلصات نباتية عالية النقاء ومكونات طول العمر | مورد B2B | GINKVORA"
+  description="GINKVORA هي مورد معتمد للمواد الخام النباتية والنشطة حيوياً عالية النقاء لمستحضرات التجميل والمكملات الغذائية، مع وثائق اختبارات الدفعات الكاملة."
   structuredData={websiteSchema}
   preloadHeroImage={true}
 >
