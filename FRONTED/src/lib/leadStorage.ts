@@ -23,7 +23,7 @@ export type LeadRecord = {
 };
 
 function getWriteClient() {
-  const token = import.meta.env.SANITY_WRITE_TOKEN;
+  const token = import.meta.env.SANITY_WRITE_TOKEN || import.meta.env.SANITY_API_TOKEN;
   if (!token) throw new Error('SANITY_WRITE_TOKEN is not configured.');
 
   return createClient({

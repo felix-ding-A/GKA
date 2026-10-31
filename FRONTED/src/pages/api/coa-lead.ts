@@ -9,7 +9,10 @@ export const prerender = false; // SSR endpoint
 const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
 const FROM_EMAIL = import.meta.env.FROM_EMAIL || 'noreply@ginkvora.com';
-const TO_EMAIL   = import.meta.env.TO_EMAIL   || 'inquiry@ginkvora.com';
+const TO_EMAILS  = (import.meta.env.TO_EMAIL || 'inquiry@ginkvora.com')
+  .split(',')
+  .map((e: string) => e.trim())
+  .filter(Boolean);
 
 // ---------------------------------------------------------------------------
 // Security Helpers: HTML Sanitization & Memory Rate Limiting
@@ -213,7 +216,7 @@ export const POST: APIRoute = async ({ request }) => {
     // --- Send notification to GINKVORA team ---
     const teamEmailPromise = resend.emails.send({
       from: FROM_EMAIL,
-      to: TO_EMAIL,
+      to: TO_EMAILS,
       replyTo: email,
       subject: `[COA Access] Lead: ${escapeHtml(name)} — ${escapeHtml(productName)}`,
       html: `
