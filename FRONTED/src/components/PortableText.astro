@@ -1,6 +1,7 @@
 ---
 // src/components/PortableText.astro — Simple Portable Text and Markdown renderer
 import { marked } from 'marked';
+import { urlFor, optimizeRichTextHtml } from '../lib/sanity';
 
 interface Props {
   value: any;
@@ -53,6 +54,12 @@ if (typeof value === 'string') {
 
         return `<p>${inlineHtml}</p>`;
       }
+
+      if (block._type === 'image' && (block.asset || block.url)) {
+        const alt = String(block.alt || '').replace(/"/g, '&quot;');
+        const imgSrc = urlFor(block).width(800).format('webp').url();
+        return `<p><img src="${imgSrc}" alt="${alt}" /></p>`;
+      }
       
       return '';
     })
@@ -66,36 +73,7 @@ if (typeof value === 'string') {
   htmlContent = `<p>${JSON.stringify(value)}</p>`;
 }
 
-// Wrap table elements with a scrollable container for responsiveness
-if (htmlContent.includes('<table')) {
-  htmlContent = htmlContent.replace(/<table([\s\S]*?)>([\s\S]*?)<\/table>/gi, '<div class="table-container"><table$1>$2</table></div>');
-}
-
-// Ensure all <img> tags in rich text have width, height, loading="lazy", decoding="async" to eliminate CLS
-htmlContent = htmlContent.replace(/<img\s+(?![^>]*\bwidth=)([^>]*)\/?>/gi, (match, p1) => {
-  const dimsMatch = match.match(/-(\d+)x(\d+)\./);
-  let w = "800";
-  let h = "600";
-  if (dimsMatch) {
-    w = "800";
-    h = Math.round(800 * (parseInt(dimsMatch[2]) / parseInt(dimsMatch[1]))).toString();
-  }
-  return `<img width="${w}" height="${h}" loading="lazy" decoding="async" ${p1} />`;
-});
-
-// Replace any raw sanity CDN domains in rich text / markdown HTML content
-htmlContent = htmlContent
-  .replace(/https:\/\/cdn\.sanity\.io\/files\//g, '/media/files/')
-  .replace(/https:\/\/cdn\.sanity\.io/g, '/media/images')
-  .replace(/https:\/\/files\.sanity\.io(?:\/files)?\//g, '/media/files/');
-
-// Make external links open in a new tab
-htmlContent = htmlContent.replace(/<a\b([^>]*)>/gi, (match, attributes) => {
-  if (/href=["']http/i.test(attributes) && !/target=/i.test(attributes)) {
-    return `<a target="_blank" rel="noopener noreferrer"${attributes}>`;
-  }
-  return match;
-});
+htmlContent = optimizeRichTextHtml(htmlContent);
 ---
 
 <div class="portable-text" set:html={htmlContent} />

@@ -148,6 +148,66 @@ function toMediaFileProxyUrl(url: string): string {
     .replace('https://files.sanity.io/', '/media/files/');
 }
 
+export function optimizeRichTextHtml(rawHtml: string): string {
+  if (!rawHtml) return '';
+  let htmlContent = rawHtml;
+
+  if (htmlContent.includes('<table')) {
+    htmlContent = htmlContent.replace(
+      /<table([\s\S]*?)>([\s\S]*?)<\/table>/gi,
+      '<div class="table-container"><table$1>$2</table></div>'
+    );
+  }
+
+  htmlContent = htmlContent
+    .replace(/https:\/\/cdn\.sanity\.io\/files\//g, '/media/files/')
+    .replace(/https:\/\/cdn\.sanity\.io/g, '/media/images')
+    .replace(/https:\/\/files\.sanity\.io(?:\/files)?\//g, '/media/files/');
+
+  htmlContent = htmlContent.replace(/<img\s+([^>]*?)\s*\/?>/gi, (_match: string, rawAttrs: string) => {
+    let attrs = rawAttrs.trim();
+
+    const srcMatch = attrs.match(/\bsrc=(["'])([^"']+)\1/i);
+    if (srcMatch) {
+      const quote = srcMatch[1];
+      const originalSrc = srcMatch[2];
+      if (originalSrc.startsWith('/media/images/images/') && !/\.svg(\?|$)/i.test(originalSrc)) {
+        const [basePath] = originalSrc.split('?');
+        const src480  = `${basePath}?w=480&fm=webp&q=80&fit=max`;
+        const src800  = `${basePath}?w=800&fm=webp&q=80&fit=max`;
+        const src1200 = `${basePath}?w=1200&fm=webp&q=80&fit=max`;
+
+        attrs = attrs.replace(/\bsrc=(["'])([^"']+)\1/i, `src=${quote}${src800}${quote}`);
+        if (!/\bsrcset=/i.test(attrs)) {
+          attrs += ` srcset="${src480} 480w, ${src800} 800w, ${src1200} 1200w" sizes="(max-width: 800px) 100vw, 800px"`;
+        }
+      }
+    }
+
+    if (!/\bwidth=/i.test(attrs)) {
+      const dimsMatch = attrs.match(/-(\d+)x(\d+)\./);
+      let w = '800';
+      let h = '600';
+      if (dimsMatch) {
+        w = '800';
+        h = Math.round(800 * (parseInt(dimsMatch[2], 10) / parseInt(dimsMatch[1], 10))).toString();
+      }
+      attrs = `width="${w}" height="${h}" loading="lazy" decoding="async" ${attrs}`;
+    }
+
+    return `<img ${attrs} />`;
+  });
+
+  htmlContent = htmlContent.replace(/<a\b([^>]*)>/gi, (match: string, attributes: string) => {
+    if (/href=["']http/i.test(attributes) && !/target=/i.test(attributes)) {
+      return `<a target="_blank" rel="noopener noreferrer"${attributes}>`;
+    }
+    return match;
+  });
+
+  return htmlContent;
+}
+
 function wrapSanityImageBuilder(imageBuilder: any): any {
   return new Proxy(imageBuilder, {
     get(target, property) {
@@ -172,7 +232,9 @@ function wrapSanityImageBuilder(imageBuilder: any): any {
 export function urlFor(source: any) {
   // If source is already a direct URL string (used in mock data or direct fetched URLs), return it directly
   if (typeof source === 'string' && source.startsWith('http')) {
-    let currentUrl = source;
+    let currentUrl = source.includes('cdn.sanity.io/images/') && !/\.svg(\?|$)/i.test(source)
+      ? setUrlParam(setUrlParam(source, 'fm', 'webp'), 'q', '80')
+      : source;
     const mockBuilder = {
       url: () => toMediaProxyUrl(currentUrl),
       width: (w: number) => {
@@ -230,7 +292,8 @@ export function urlFor(source: any) {
     return fallbackBuilder;
   }
   try {
-    const b = builder.image(source).auto('format');
+    const isSvg = typeof source?.asset?._ref === 'string' && source.asset._ref.endsWith('-svg');
+    const b = isSvg ? builder.image(source) : builder.image(source).format('webp').quality(80);
     return wrapSanityImageBuilder(b);
   } catch (err) {
     let currentUrl = 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600&auto=format&fit=crop&q=80';
@@ -629,8 +692,8 @@ export async function searchProductsAndPosts(query: string, lang: SearchLanguage
   }`, { term: `${query}*` }, 5 * 60_000);
 
   return {
-    products: Array.isArray(data?.products) ? data.products : [],
-    posts: Array.isArray(data?.posts) ? data.posts : [],
+    products: Array.isArray(data?.products) ? data.products.map((p: any) => ({ ...p, imageUrl: p.imageUrl ? urlFor(p.imageUrl).width(160).format('webp').url() : undefined })) : [],
+    posts: Array.isArray(data?.posts) ? data.posts.map((p: any) => ({ ...p, imageUrl: p.imageUrl ? urlFor(p.imageUrl).width(160).format('webp').url() : undefined })) : [],
   };
 }
 
@@ -1032,6 +1095,10 @@ export type SanityPost = {
   body?: any;
   body_ru?: any;
   body_ar?: any;
+  title_es?: string;
+  excerpt_es?: string;
+  body_es?: any;
+  mainImage?: any;
   coverImage?: any;
   featured?: boolean;
   publishedAt?: string;
@@ -1058,6 +1125,11 @@ export type SanityPost = {
   faqItems?: { question: string; answer: string }[];
   faqItems_ru?: { question: string; answer: string }[];
   faqItems_ar?: { question: string; answer: string }[];
+  faqItems_es?: { question: string; answer: string }[];
+  meta_title_es?: string;
+  meta_description_es?: string;
+  relatedPosts?: any[];
+  recentPosts?: any[];
   relatedProduct?: {
     name: string;
     slug: string;
