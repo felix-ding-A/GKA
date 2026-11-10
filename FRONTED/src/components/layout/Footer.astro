@@ -132,7 +132,7 @@ const companyLinks = [
           <h3 class="footer-col-title">{t('footer.col_products')}</h3>
           <ul class="footer-links" role="list">
             {productLinks.map((link) => (
-              <li><a href={link.href} class="footer-link">{link.label}</a></li>
+              <li><a href={link.href} class="footer-link" rel={link.href.includes('?') ? 'nofollow' : undefined}>{link.label}</a></li>
             ))}
           </ul>
         </div>

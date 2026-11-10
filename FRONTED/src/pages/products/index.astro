@@ -311,7 +311,7 @@ const itemListSchema = {
                     <a href={`/products/${prod.slug}`} class="btn btn--secondary btn--sm">
                       Specifications
                     </a>
-                    <a href={`/contact?product=${encodeURIComponent(prod.name)}`} class="btn btn--primary btn--sm">
+                    <a href={`/contact?product=${encodeURIComponent(prod.name)}`} class="btn btn--primary btn--sm" rel="nofollow">
                       Inquire
                     </a>
                   </div>
@@ -320,7 +320,6 @@ const itemListSchema = {
             );
           })}
         </div>
-
         <!-- Empty state -->
         <div class="empty-state" id="empty-state" style="display: none;" role="alert">
           <div class="empty-icon">🔍</div>

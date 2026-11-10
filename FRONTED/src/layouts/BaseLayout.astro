@@ -62,7 +62,8 @@ const isTrackingOrSearch = Boolean(
     rawSearch.includes('gclid=') ||
     rawSearch.includes('fbclid=') ||
     rawSearch.includes('ref=') ||
-    rawSearch.includes('search=')
+    rawSearch.includes('search=') ||
+    rawSearch.includes('product=')
   )
 );
 // Force noindex for machine-translated non-English locales (ru, es, ar) to protect Google indexing quality

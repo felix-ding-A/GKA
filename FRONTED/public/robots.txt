@@ -20,6 +20,7 @@ User-agent: YouBot
 User-agent: Yandex
 User-agent: YandexBot
 Allow: /
+Allow: /*?page=*
 Disallow: /api/
 Disallow: /*?*
 Disallow: /cdn-cgi/
@@ -51,6 +52,7 @@ Disallow: /
 # ------------------------------------------------------------------------------
 User-agent: *
 Allow: /
+Allow: /*?page=*
 Disallow: /api/
 Disallow: /*?*
 Disallow: /cdn-cgi/
