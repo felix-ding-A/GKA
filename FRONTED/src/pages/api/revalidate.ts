@@ -64,6 +64,36 @@ async function submitIndexNow(origin: string, paths: string[]) {
   if (!response.ok) throw new Error(`IndexNow returned ${response.status}.`);
 }
 
+async function purgeCloudflareCache(origin: string, paths: string[]) {
+  const zoneId = import.meta.env.CLOUDFLARE_ZONE_ID;
+  const token = import.meta.env.CLOUDFLARE_API_TOKEN;
+  if (!zoneId || !token || paths.length === 0) return;
+
+  const site = new URL(origin);
+  const files = paths.map((pathname) => new URL(pathname, site).toString());
+
+  try {
+    const response = await fetch(`https://api.cloudflare.com/client/v4/zones/${zoneId}/purge_cache`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ files }),
+      signal: AbortSignal.timeout(10_000),
+    });
+
+    const data = await response.json();
+    if (data.success) {
+      console.info(`[Revalidate] Cloudflare cache purged for ${files.length} URLs.`);
+    } else {
+      console.warn('[Revalidate] Cloudflare purge returned errors:', data.errors);
+    }
+  } catch (error) {
+    console.warn('[Revalidate] Cloudflare purge failed (non-fatal):', error);
+  }
+}
+
 export const POST: APIRoute = async ({ request }) => {
   const secret = import.meta.env.SANITY_REVALIDATE_SECRET;
   const bypassToken = import.meta.env.ISR_BYPASS_TOKEN;
@@ -191,6 +221,12 @@ export const POST: APIRoute = async ({ request }) => {
         revalidated,
         removed,
       }, 502);
+    }
+
+    // Purge Cloudflare Edge cache so new content reflects immediately
+    const changedPaths = [...revalidated, ...removed];
+    if (changedPaths.length > 0) {
+      await purgeCloudflareCache(origin, changedPaths);
     }
 
     // IndexNow is incremental: submit only new/current URLs after Vercel has
