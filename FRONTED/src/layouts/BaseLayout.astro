@@ -65,7 +65,12 @@ const isTrackingOrSearch = Boolean(
     rawSearch.includes('search=')
   )
 );
-const shouldNoindex = noindex || isTrackingOrSearch;
+// Force noindex for machine-translated non-English locales (ru, es, ar) to protect Google indexing quality
+const isNonEnglish = Boolean(
+  (lang && lang !== 'en') ||
+  /^\/(ru|es|ar)(\/|$)/.test(Astro.url.pathname)
+);
+const shouldNoindex = noindex || isTrackingOrSearch || isNonEnglish;
 
 const cookieCopyByLocale = {
   en: {

@@ -1,5 +1,7 @@
 export const SITE_URL = 'https://ginkvora.com';
-export const LOCALES = ['en', 'ru', 'ar', 'es'];
+export const ALL_LOCALES = ['en', 'ru', 'ar', 'es'];
+// Sitemaps are restricted to English ('en') to focus Googlebot crawl budget on primary high-quality content
+export const LOCALES = ['en'];
 
 export const staticPages = [
   '', 'about', 'about/mission', 'custom-formulation', 'calculator',
@@ -13,7 +15,10 @@ export function sitemapUrl(path: string, locale: string) {
 }
 
 export function alternateLinks(path: string) {
-  return [...LOCALES.map((locale) =>
+  if (LOCALES.length <= 1) {
+    return '';
+  }
+  return '\n    ' + [...LOCALES.map((locale) =>
     `<xhtml:link rel="alternate" hreflang="${locale}" href="${sitemapUrl(path, locale)}" />`,
   ), `<xhtml:link rel="alternate" hreflang="x-default" href="${sitemapUrl(path, 'en')}" />`]
     .join('\n    ');
