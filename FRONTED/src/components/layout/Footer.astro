@@ -26,10 +26,11 @@ const solutionsLinks = [
 ];
 
 const companyLinks = [
-  { href: lp('/about'),     label: t('footer.link_about') },
-  { href: lp('/quality'),   label: t('footer.link_quality') },
-  { href: lp('/insights'),  label: t('footer.link_insights') },
-  { href: lp('/contact'),   label: t('footer.link_contact') },
+  { href: lp('/about'),          label: t('footer.link_about') },
+  { href: lp('/quality'),        label: t('footer.link_quality') },
+  { href: lp('/insights'),       label: t('footer.link_insights') },
+  { href: lp('/site-directory'), label: 'Site Directory' },
+  { href: lp('/contact'),        label: t('footer.link_contact') },
 ];
 ---
 
@@ -185,6 +186,7 @@ const companyLinks = [
         <div class="footer-legal">
           <a href={lp('/privacy')} class="footer-legal-link">{t('footer.privacy')}</a>
           <a href={lp('/terms')}   class="footer-legal-link">{t('footer.terms')}</a>
+          <a href={lp('/site-directory')} class="footer-legal-link">Site Directory</a>
           <a href="/sitemap.xml"   class="footer-legal-link">{t('footer.sitemap')}</a>
         </div>
       </div>

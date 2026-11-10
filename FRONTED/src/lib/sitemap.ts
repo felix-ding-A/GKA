@@ -6,7 +6,7 @@ export const LOCALES = ['en'];
 export const staticPages = [
   '', 'about', 'about/mission', 'custom-formulation', 'calculator',
   'featured-formulas', 'anti-aging-philosophy', 'contact', 'quality',
-  'products', 'insights', 'terms', 'privacy',
+  'products', 'insights', 'terms', 'privacy', 'site-directory',
 ];
 
 export function sitemapUrl(path: string, locale: string) {

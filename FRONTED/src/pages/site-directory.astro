@@ -1,0 +1,536 @@
+---
+// src/pages/site-directory.astro — HTML Site Directory & Crawl Hub
+export const prerender = false;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { cachedFetch } from '../lib/sanity';
+import { MOCK_PRODUCTS, MOCK_POSTS } from '../lib/mockData';
+
+interface DirectoryProduct {
+  slug: string;
+  name: string;
+  purity?: string;
+  casNumber?: string;
+}
+
+interface DirectoryPost {
+  slug: string;
+  title: string;
+  publishedAt?: string;
+}
+
+let products: DirectoryProduct[] = [];
+let posts: DirectoryPost[] = [];
+
+try {
+  const query = `{
+    "products": *[
+      _type == "product" &&
+      !(_id in path("drafts.**")) &&
+      defined(slug.current)
+    ] | order(name asc) {
+      "slug": slug.current,
+      name,
+      purity,
+      casNumber
+    },
+    "posts": *[
+      _type == "post" &&
+      !(_id in path("drafts.**")) &&
+      defined(slug.current) &&
+      (!defined(publishedAt) || publishedAt <= now())
+    ] | order(publishedAt desc) {
+      "slug": slug.current,
+      title,
+      publishedAt
+    }
+  }`;
+
+  const res = await cachedFetch<{ products: DirectoryProduct[]; posts: DirectoryPost[] }>(query);
+  products = res?.products || [];
+  posts = res?.posts || [];
+} catch (e) {
+  products = MOCK_PRODUCTS.map((p) => ({
+    slug: p.slug,
+    name: p.name,
+    purity: p.purity,
+    casNumber: p.casNumber,
+  }));
+  posts = MOCK_POSTS.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    publishedAt: p.publishedAt,
+  }));
+}
+
+const corePages = [
+  { href: '/', title: 'Home', desc: 'Active botanical constituents & pharmaceutical-grade raw materials.' },
+  { href: '/products', title: 'Product Catalog', desc: 'Browse all 80+ high-purity cosmetic & nutraceutical active ingredients.' },
+  { href: '/insights', title: 'Insights & Research', desc: 'Formulation guides, ingredient spotlights, and clinical evidence reviews.' },
+  { href: '/about', title: 'About GINKVORA', desc: 'Corporate overview, heritage, and pharmaceutical-grade supply chain.' },
+  { href: '/about/mission', title: 'Mission & Vision', desc: 'Advancing human health through validated natural science.' },
+  { href: '/quality', title: 'Quality & Testing', desc: 'HPLC, ICP-MS analysis, GMP standards, and COA transparency.' },
+  { href: '/anti-aging-philosophy', title: 'Anti-Aging Philosophy', desc: 'Targeting hallmarks of aging through cellular bioactives.' },
+  { href: '/featured-formulas', title: 'Featured Formulations', desc: 'Synergistic ingredient stacks and prototype concepts.' },
+  { href: '/calculator', title: 'Formulation Calculator', desc: 'Interactive active dosage & batch scaling calculations.' },
+  { href: '/custom-formulation', title: 'Custom Sourcing & Synthesis', desc: 'B2B contract synthesis, toll extraction, and custom purity specs.' },
+  { href: '/contact', title: 'Contact & Commercial Desk', desc: 'Direct inquiry, bulk sample requests, and regulatory documentation.' },
+  { href: '/privacy', title: 'Privacy Policy', desc: 'Data handling, cookie compliance, and user protection.' },
+  { href: '/terms', title: 'Terms & Conditions', desc: 'Commercial sales terms, delivery, and trade specifications.' }
+];
+
+const siteUrl = 'https://ginkvora.com';
+const pageTitle = 'Site Directory | Complete Product & Insights Index | GINKVORA';
+const pageDescription = 'Explore the complete directory of GINKVORA active ingredients, raw materials, scientific insights, and formulation guides. Zero-depth navigational index for industry formulators.';
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+    { '@type': 'ListItem', position: 2, name: 'Site Directory', item: `${siteUrl}/site-directory` },
+  ],
+};
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} slot="head" />
+
+  <main class="directory-page bg-noise">
+    <!-- Header Banner -->
+    <header class="page-banner" aria-label="Page Header">
+      <div class="banner-gradient"></div>
+      <div class="container banner-content">
+        <span class="section-label fade-in-up">Navigational Index</span>
+        <h1 class="banner-title fade-in-up delay-1">GINKVORA Site Directory</h1>
+        <p class="banner-desc fade-in-up delay-2">
+          Comprehensive direct-access index of our pharmaceutical-grade bioactives, technical guides, and B2B resources.
+        </p>
+
+        <!-- Stats Bar -->
+        <div class="stats-pills fade-in-up delay-3">
+          <span class="stat-pill"><strong>{products.length}</strong> Active Ingredients</span>
+          <span class="stat-pill"><strong>{posts.length}</strong> Scientific Insights</span>
+          <span class="stat-pill"><strong>{corePages.length}</strong> Core Resources</span>
+        </div>
+
+        <!-- Jump Navigation -->
+        <nav class="jump-nav fade-in-up delay-3" aria-label="Jump to directory sections">
+          <span class="jump-label">Jump to:</span>
+          <a href="#core-resources" class="jump-link">Core Resources</a>
+          <a href="#active-ingredients" class="jump-link">Active Ingredients ({products.length})</a>
+          <a href="#insights-research" class="jump-link">Scientific Insights ({posts.length})</a>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container directory-body">
+      <!-- 1. Core Corporate & Solution Pages -->
+      <section id="core-resources" class="directory-section" aria-labelledby="heading-core">
+        <div class="section-header">
+          <h2 id="heading-core" class="section-title">
+            <span class="title-icon">🏛️</span> Core Resources & Solutions
+          </h2>
+          <p class="section-subtitle">Corporate governance, laboratory testing standards, formulation tools, and compliance information.</p>
+        </div>
+
+        <div class="core-grid">
+          {corePages.map((page) => (
+            <a href={page.href} class="core-card glass">
+              <h3 class="core-card-title">{page.title}</h3>
+              <p class="core-card-desc">{page.desc}</p>
+              <span class="core-card-arrow" aria-hidden="true">→</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- 2. Active Ingredients & Bioactive Raw Materials -->
+      <section id="active-ingredients" class="directory-section" aria-labelledby="heading-products">
+        <div class="section-header">
+          <h2 id="heading-products" class="section-title">
+            <span class="title-icon">🧪</span> Active Ingredients & Bioactive Raw Materials ({products.length})
+          </h2>
+          <p class="section-subtitle">Standardized phytochemicals, cosmetic peptides, cellular longevity actives, and liposomal powders.</p>
+        </div>
+
+        <div class="products-grid">
+          {products.map((prod) => (
+            <a href={`/products/${prod.slug}`} class="product-item glass">
+              <div class="product-meta">
+                <h3 class="product-name">{prod.name}</h3>
+                <div class="product-tags">
+                  {prod.purity && <span class="tag purity-tag">{prod.purity}</span>}
+                  {prod.casNumber && <span class="tag cas-tag">CAS: {prod.casNumber}</span>}
+                </div>
+              </div>
+              <span class="item-arrow" aria-hidden="true">→</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- 3. Scientific Insights & Technical Guides -->
+      <section id="insights-research" class="directory-section" aria-labelledby="heading-insights">
+        <div class="section-header">
+          <h2 id="heading-insights" class="section-title">
+            <span class="title-icon">🔬</span> Scientific Insights & Technical Guides ({posts.length})
+          </h2>
+          <p class="section-subtitle">Analytical testing reviews, formulator troubleshooting, bioavailability enhancement, and market research.</p>
+        </div>
+
+        <div class="posts-grid">
+          {posts.map((post) => (
+            <a href={`/insights/${post.slug}`} class="post-item glass">
+              <div class="post-info">
+                {post.publishedAt && (
+                  <span class="post-date">
+                    {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                  </span>
+                )}
+                <h3 class="post-title">{post.title}</h3>
+              </div>
+              <span class="item-arrow" aria-hidden="true">→</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .directory-page {
+    padding-bottom: 5rem;
+    min-height: 100vh;
+  }
+
+  .page-banner {
+    position: relative;
+    padding: 5rem 0 3.5rem;
+    background: radial-gradient(circle at 50% 20%, rgba(20, 45, 30, 0.45) 0%, rgba(10, 18, 12, 0.95) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+
+  .banner-gradient {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% -20%, rgba(52, 211, 153, 0.15), transparent 70%);
+    pointer-events: none;
+  }
+
+  .banner-content {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .section-label {
+    display: inline-block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent, #34d399);
+    margin-bottom: 0.75rem;
+  }
+
+  .banner-title {
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .banner-desc {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+
+  .stats-pills {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    padding: 0.4rem 1rem;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .stat-pill strong {
+    color: #fbbf24;
+    font-weight: 700;
+  }
+
+  .jump-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    font-size: 0.875rem;
+    padding: 0.75rem 1.25rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 9999px;
+    width: fit-content;
+    margin: 0 auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .jump-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+  }
+
+  .jump-link {
+    color: #34d399;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .jump-link:hover {
+    color: #fbbf24;
+    text-decoration: underline;
+  }
+
+  .directory-body {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3.5rem 1.5rem 0;
+  }
+
+  .directory-section {
+    margin-bottom: 4rem;
+  }
+
+  .section-header {
+    margin-bottom: 1.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.625rem;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .title-icon {
+    font-size: 1.35rem;
+  }
+
+  .section-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9375rem;
+  }
+
+  /* Core Pages Grid */
+  .core-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .core-card {
+    position: relative;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .core-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(52, 211, 153, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .core-card-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.35rem;
+  }
+
+  .core-card-desc {
+    font-size: 0.8125rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .core-card-arrow,
+  .item-arrow {
+    color: #34d399;
+    font-size: 1.125rem;
+    align-self: flex-end;
+    transition: transform 0.2s ease;
+  }
+
+  .core-card:hover .core-card-arrow,
+  .product-item:hover .item-arrow,
+  .post-item:hover .item-arrow {
+    transform: translateX(3px);
+    color: #fbbf24;
+  }
+
+  /* Products Grid */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 0.875rem;
+  }
+
+  .product-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-radius: 0.625rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .product-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(251, 191, 36, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .product-meta {
+    flex: 1;
+    min-width: 0;
+    padding-right: 0.75rem;
+  }
+
+  .product-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .product-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+
+  .purity-tag {
+    background: rgba(52, 211, 153, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(52, 211, 153, 0.3);
+  }
+
+  .cas-tag {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Posts Grid */
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 0.875rem;
+  }
+
+  .post-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-radius: 0.625rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .post-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(52, 211, 153, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .post-info {
+    flex: 1;
+    min-width: 0;
+    padding-right: 0.75rem;
+  }
+
+  .post-date {
+    display: block;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: 0.25rem;
+  }
+
+  .post-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .banner-title {
+      font-size: 1.875rem;
+    }
+    .products-grid,
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -32,8 +32,6 @@ export function createProductServerTiming() {
         'Server-Timing',
         `sanity;dur=${sanityMs};desc="Sanity product query", related-products;dur=${relatedProductsMs};desc="Related products query", related-posts;dur=${relatedPostsMs};desc="Related posts query", product-data;dur=${dataMs};desc="Product data preparation"`,
       );
-      responseHeaders.set('X-GKV-Generated-At', generatedAt);
-      responseHeaders.set('X-GKV-Product-Generation', '1');
 
       // This structured event appears only for a render/generation, not for a
       // pure edge cache hit. It is intentionally limited to public route and

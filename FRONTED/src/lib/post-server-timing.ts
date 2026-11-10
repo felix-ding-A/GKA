@@ -26,8 +26,6 @@ export function createPostServerTiming() {
         'Server-Timing',
         `sanity;dur=${postQueryMs};desc="Sanity insight query", insight-data;dur=${dataMs};desc="Insight data preparation"`,
       );
-      responseHeaders.set('X-GKV-Generated-At', generatedAt);
-      responseHeaders.set('X-GKV-Insight-Generation', '1');
 
       console.info(JSON.stringify({
         level: 'info',

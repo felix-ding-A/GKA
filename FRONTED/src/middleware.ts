@@ -30,14 +30,20 @@ export const onRequest = defineMiddleware(async (context, next) => {
     if (isPersonalizedPage) {
       response.headers.set('Cache-Control', 'private, no-store');
     } else if (isDetailPage) {
-      // Keep Astro/Vercel's ISR Cache-Control intact while allowing Cloudflare,
-      // when its narrow detail-page cache rule is enabled, to retain successful
-      // HTML for five minutes. Explicitly reject non-200 responses so a missing
-      // CMS document can never become a cached Cloudflare 404.
+      // Keep Astro/Vercel's ISR Cache-Control intact while allowing Cloudflare & Edge CDN,
+      // when detail-page cache rules are enabled, to retain successful HTML for 24 hours.
+      // Explicitly reject non-200 responses so a missing CMS document can never become a cached 404/500.
+      const isOk = response.status === 200;
       response.headers.set(
         'Cloudflare-CDN-Cache-Control',
-        response.status === 200
-          ? 'public, max-age=300, stale-while-revalidate=60'
+        isOk
+          ? 'public, max-age=86400, stale-while-revalidate=604800'
+          : 'no-store'
+      );
+      response.headers.set(
+        'CDN-Cache-Control',
+        isOk
+          ? 'public, s-maxage=86400, stale-while-revalidate=604800'
           : 'no-store'
       );
     } else if (!isDetailPage) {
