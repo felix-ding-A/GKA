@@ -36,6 +36,14 @@ const step5_tags = lang === 'ar'
   : (lang === 'ru' 
     ? ['Упаковка в среде азота', 'Сертификат анализа COA', 'Доставка DDP / ExW / FOB'] 
     : ['Nitrogen-flush Packaging', 'COA Included', 'DDP / ExW / FOB Available']);
+
+const visOriginAlt = lang === 'ar'
+  ? 'مؤسس جينكفورا يتفقد قاعدة زراعة النباتات المعتمدة للتحقق من أصل المواد الخام ونقائها — من التربة إلى العلم'
+  : (lang === 'ru'
+    ? 'Основатель GINKVORA инспектирует базу выращивания растительного сырья для подтверждения происхождения и чистоты — От почвы к науке'
+    : (lang === 'es'
+      ? 'El fundador de GINKVORA inspecciona la base de cultivo botánico para verificar el origen y pureza de las materias primas — Del suelo a la ciencia'
+      : 'GINKVORA founder inspecting certified botanical cultivation base to verify raw material origin and phytochemical purity — From Soil to Science'));
 ---
 
 <section class="extraction-section bg-noise" id="extraction-process" aria-label="Extraction Process">
@@ -187,8 +195,8 @@ const step5_tags = lang === 'ar'
       <div class="extraction-visual" aria-hidden="true">
         <div class="vis-img vis-img--hq">
           <img
-            src="/images/ginkvora-biotechnology-hq-office-workspace.webp"
-            alt="GINKVORA high-end biotechnology headquarters office and workspace"
+            src="/images/From Soil to Science Ginkvora’s Quest for Raw Material Origin.webp"
+            alt={visOriginAlt}
             loading="lazy" width="600" height="400"
           />
           <div class="vis-overlay"></div>
