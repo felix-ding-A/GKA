@@ -30,8 +30,8 @@ const ariaLabel = ariaLabelMap[lang] || ariaLabelMap.en;
 <style>
   .back-to-top {
     position: fixed;
-    bottom: 6rem;
-    right: 1.5rem;
+    bottom: 9.75rem; /* Positioned above WhatsApp (bottom 5.75rem + 56px height) without overlap */
+    right: 1.75rem;  /* Centered along the vertical right-side action axis */
     z-index: 99;
     width: 44px;
     height: 44px;
@@ -72,8 +72,8 @@ const ariaLabel = ariaLabelMap[lang] || ariaLabelMap.en;
 
   @media (max-width: 640px) {
     .back-to-top {
-      bottom: 5.5rem;
-      right: 1.25rem;
+      bottom: 8.625rem;
+      right: 1.4375rem;
       width: 40px;
       height: 40px;
     }

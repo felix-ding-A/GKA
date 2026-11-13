@@ -4,6 +4,7 @@ import '../styles/global.css';
 import Navbar from '../components/layout/Navbar.astro';
 import Footer from '../components/layout/Footer.astro';
 import BackToTop from '../components/layout/BackToTop.astro';
+import WhatsAppWidget from '../components/layout/WhatsAppWidget.astro';
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
 import { stripLangPrefix, getDir } from '../i18n/utils';
@@ -382,6 +383,9 @@ const organizationSchema = {
 
     <!-- Back to Top Button -->
     <BackToTop lang={lang} />
+
+    <!-- Floating WhatsApp Customer Support Widget -->
+    <WhatsAppWidget lang={lang} />
 
     <!-- Reveal animation script -->
     <script is:inline>
@@ -999,10 +1003,11 @@ const organizationSchema = {
     color: #f0c878;
   }
 
-  /* Hide Chatwoot launcher while cookie consent banner is actively displayed to prevent overlap */
+  /* Hide Chatwoot launcher and WhatsApp while cookie consent banner is actively displayed to prevent overlap */
   body:has(#cookie-consent-banner.visible) .woot-widget-bubble,
   body:has(#cookie-consent-banner.visible) .woot-widget-holder,
-  body:has(#cookie-consent-banner.visible) #chatwoot_iframe {
+  body:has(#cookie-consent-banner.visible) #chatwoot_iframe,
+  body:has(#cookie-consent-banner.visible) .gv-whatsapp-widget {
     opacity: 0 !important;
     pointer-events: none !important;
     visibility: hidden !important;
