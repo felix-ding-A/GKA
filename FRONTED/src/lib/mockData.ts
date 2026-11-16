@@ -8,7 +8,7 @@ export const MOCK_CATEGORIES = [
   { _id: 'cat-4', name: 'Custom Formulation', slug: 'custom-formulation', description: 'Tailored purity levels and custom botanical blends.', icon: '🧪', color: '#c8965a' }
 ];
 
-export const MOCK_PRODUCTS: (SanityProduct & { description?: any; specifications?: any; coaFile?: any; msdsFile?: any; seo?: any; gallery?: any })[] = [
+export const MOCK_PRODUCTS: (SanityProduct & { description?: any; specifications?: any; coaFile?: any; tdsFile?: any; specSheet?: any; msdsFile?: any; seo?: any; gallery?: any })[] = [
   {
     _id: "0da4b973-f06b-44f5-956d-cce836fee497",
     name: "PDRN (Polydeoxyribonucleotide) — Bulk Cosmetic Raw Material",

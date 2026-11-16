@@ -434,10 +434,18 @@ export const productType = defineType({
       group: 'documents',
     }),
     defineField({
-      name: 'specSheet',
-      title: 'Product Specification Sheet',
+      name: 'tdsFile',
+      title: 'TDS (Technical Data Sheet)',
       type: 'file',
       group: 'documents',
+      description: 'Upload Technical Data Sheet (TDS) PDF',
+    }),
+    defineField({
+      name: 'specSheet',
+      title: 'TDS / Product Specification Sheet',
+      type: 'file',
+      group: 'documents',
+      description: 'Upload Technical Data Sheet (TDS) / Specification PDF',
     }),
 
     // ── SEO ─────────────────────────────────────────

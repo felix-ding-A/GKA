@@ -401,6 +401,8 @@ export const PRODUCT_DETAIL_FIELDS = `
   specifications[]{label, value},
   gallery[],
   coaFile{asset->{url}},
+  tdsFile{asset->{url}},
+  specSheet{asset->{url}},
   msdsFile{asset->{url}},
   complianceNote,
   complianceNote_ru,
@@ -538,6 +540,15 @@ export async function getProductBySlug(slug: string) {
     if (data) {
       if (data.coaFile?.asset?.url) {
         data.coaFile.asset.url = toMediaFileProxyUrl(data.coaFile.asset.url);
+      }
+      if (data.tdsFile?.asset?.url) {
+        data.tdsFile.asset.url = toMediaFileProxyUrl(data.tdsFile.asset.url);
+      }
+      if (data.specSheet?.asset?.url) {
+        data.specSheet.asset.url = toMediaFileProxyUrl(data.specSheet.asset.url);
+      }
+      if (!data.tdsFile?.asset?.url && data.specSheet?.asset?.url) {
+        data.tdsFile = data.specSheet;
       }
       if (data.msdsFile?.asset?.url) {
         data.msdsFile.asset.url = toMediaFileProxyUrl(data.msdsFile.asset.url);
@@ -1078,6 +1089,10 @@ export type SanityProduct = {
   mainCategories?: string[];
   antiAgingMechanisms?: string[];
   applicationDisplay?: 'topical' | 'oral' | 'dual';
+  coaFile?: { asset?: { url: string } };
+  msdsFile?: { asset?: { url: string } };
+  tdsFile?: { asset?: { url: string } };
+  specSheet?: { asset?: { url: string } };
   faqItems?: { question: string; answer: string }[];
   faqItems_ru?: { question: string; answer: string }[];
   faqItems_ar?: { question: string; answer: string }[];
