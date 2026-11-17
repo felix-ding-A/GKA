@@ -102,11 +102,6 @@ const faqSchema = {
   description="Бесплатный интерактивный лабораторный калькулятор: расчет молярности, серийных разбавлений C1V1, молекулярной массы и масштабирования рецептур."
   keywords="калькулятор молярности, калькулятор разведений C1V1, расчет молекулярной массы, ГЛБ калькулятор, химический калькулятор"
 >
-  <link rel="alternate" hreflang="en" href={`${siteUrl}/calculator`} slot="head" />
-  <link rel="alternate" hreflang="es" href={`${siteUrl}/es/calculator`} slot="head" />
-  <link rel="alternate" hreflang="ru" href={`${siteUrl}/ru/calculator`} slot="head" />
-  <link rel="alternate" hreflang="ar" href={`${siteUrl}/ar/calculator`} slot="head" />
-  <link rel="alternate" hreflang="x-default" href={`${siteUrl}/calculator`} slot="head" />
 
   <script type="application/ld+json" set:html={JSON.stringify(formulatorSchema)} slot="head" />
   <script type="application/ld+json" set:html={JSON.stringify(appSchema)} slot="head" />

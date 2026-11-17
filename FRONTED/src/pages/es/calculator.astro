@@ -102,11 +102,6 @@ const faqSchema = {
   description="Herramienta gratuita para calcular molaridad química, diluciones C1V1, masa molecular y escala de formulaciones. Diseñada para investigadores y R&D."
   keywords="calculadora de molaridad, calculadora de dilución C1V1, peso molecular, calculadora HLB, herramientas de formulación química"
 >
-  <link rel="alternate" hreflang="en" href={`${siteUrl}/calculator`} slot="head" />
-  <link rel="alternate" hreflang="es" href={`${siteUrl}/es/calculator`} slot="head" />
-  <link rel="alternate" hreflang="ru" href={`${siteUrl}/ru/calculator`} slot="head" />
-  <link rel="alternate" hreflang="ar" href={`${siteUrl}/ar/calculator`} slot="head" />
-  <link rel="alternate" hreflang="x-default" href={`${siteUrl}/calculator`} slot="head" />
 
   <script type="application/ld+json" set:html={JSON.stringify(formulatorSchema)} slot="head" />
   <script type="application/ld+json" set:html={JSON.stringify(appSchema)} slot="head" />
